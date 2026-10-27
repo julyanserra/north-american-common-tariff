@@ -1,18 +1,20 @@
 """Compute the demographic figures used on the site from UN World Population Prospects 2024.
 
-Input: popprojAge1dt.rda from the wpp2024 data package
-       (https://github.com/PPgp/wpp2024, data/popprojAge1dt.rda), medium variant, thousands.
+Input: from the wpp2024 data package (https://github.com/PPgp/wpp2024, data/), thousands:
+       popprojAge1dt.rda (projections, medium variant) and popAge1dt.rda (estimates to 2023).
 Output: demog.json with, for 2025 and 2050, totals, median age, age shares,
         working-age population (15-64) and 5-year pyramids for CA, US, MX,
-        plus North America (sum of the three), EU-27, China, Japan, Germany and India.
+        plus North America (sum of the three), EU-27, China, Japan, Germany and India;
+        and waIndex: working-age population 2000-2050 for NA, CN, EU and JP, 2000 = 100.
 
 Usage: pip install pyreadr pandas numpy
-       python build-demography.py path/to/popprojAge1dt.rda demog.json
+       python build-demography.py popprojAge1dt.rda demog.json popAge1dt.rda
 """
 import json
 import sys
 
 import numpy as np
+import pandas as pd
 import pyreadr
 
 COUNTRIES = {"CA": [124], "US": [840], "MX": [484], "CN": [156], "JP": [392], "DE": [276], "IN": [356]}
@@ -49,12 +51,27 @@ def stats(df):
     }
 
 
-def main(src, dst):
+def working_age_index(est, proj, keys=("NA", "CN", "EU", "JP")):
+    """Working-age population by year, estimates through 2023 and projections after, indexed to 2000 = 100."""
+    df = pd.concat([est[est.year <= 2023], proj[proj.year >= 2024]])
+    df = df[(df.age >= 15) & (df.age < 65) & (df.year >= 2000) & (df.year <= 2050)]
+    out = {}
+    for k in keys:
+        wa = df[df.country_code.isin(GROUPS[k])].groupby("year")[["popM", "popF"]].sum().sum(axis=1)
+        out[k] = {str(y): round(float(100 * v / wa[2000]), 1) for y, v in wa.items()}
+    return out
+
+
+def main(src, dst, est_src=None):
     proj = pyreadr.read_r(src)["popprojAge1dt"]
     proj["year"] = proj["year"].astype(int)
     out = {}
     for year in (2025, 2050):
         out[str(year)] = {k: stats(proj[(proj.country_code.isin(c)) & (proj.year == year)]) for k, c in GROUPS.items()}
+    if est_src:
+        est = pyreadr.read_r(est_src)["popAge1dt"]
+        est["year"] = est["year"].astype(int)
+        out["waIndex"] = working_age_index(est, proj)
     json.dump(out, open(dst, "w"))
     for k in GROUPS:
         a, b = out["2025"][k]["wa_k"], out["2050"][k]["wa_k"]
@@ -62,4 +79,4 @@ def main(src, dst):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1], sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else None)

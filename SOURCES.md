@@ -70,6 +70,37 @@ Population 2025: North America 521M; EU 448M; China 1,414M.
 | U.S. pipeline gas exports to Mexico averaged a record 6.4 Bcf/d (2024) | U.S. EIA |
 | GDP 2024 ≈ $33T North America (≈30% of world), ≈$19T EU, ≈$19T China | IMF / national accounts, rounded |
 
+## Thirty years of building a region: Serra Puche (2015), updated
+
+Jaime Serra Puche, *El TLC y la formación de una región / The NAFTA and the Building of a Region*, Fondo de Cultura Económica, 2015 (and its presentation deck). Each chart reused on the site was rebuilt with current data:
+
+| Chart | 2015 figure | Update on the site | Source |
+|---|---|---|---|
+| Mexico's non-oil exports per day | $0.12B (1993), $0.92B (2013) | $1.76B (2025: $643.6B ÷ 365) | INEGI, merchandise trade balance 2025 |
+| FDI in Mexico per year | $2.9B average 1980–93; $19.3B average 1994–2012 | $40.9B (2025, record) | Secretaría de Economía, Feb. 2026 |
+| Trade openness (exports + imports, % of GDP) | ≈20% before 1986; ≈30% after GATT | 74% (2024) | World Bank WDI, NE.TRD.GNFS.ZS |
+| Workforce: North America vs China | NA overtakes China ≈2014–15 | China's 15–64 population peaked in 2014; 2050 index (2000 = 100): NA 132, China 84, EU 82, Japan 62 | UN WPP 2024 (estimates to 2023, medium variant after) |
+| Dependents per working-age person | 2012 | 2025 → 2050: MX 0.48 → 0.53, US 0.55 → 0.64, CA 0.55 → 0.64, NA 0.53 → 0.61, China 0.43 → 0.70 | UN WPP 2024 |
+| "Unión Aduanera (???)" closing slide | question | answered by Noyola & Serra (2025) | [NS] |
+
+Not reproduced, for lack of comparable recent data: U.S. content in Mexican exports (2004) and business-cycle correlation (1981–2013).
+
+| Claim | Source |
+|---|---|
+| U.S. goods imports 2017 → 2024: China $505.6B → $438.9B; Mexico $314.0B → $505.9B; Canada $300.0B → $412.7B | U.S. Census Bureau (2017 annual data via BLS; Top Trading Partners, Dec. 2024) |
+| Shanghai–New York 40-ft container $10,166 (Oct. 22, 2026); composite index peak $10,375 (Sep. 2021) | Drewry World Container Index |
+
+## Trade policy, 2024–2026
+
+| Claim | Source |
+|---|---|
+| Auto regional value content: 50% (U.S.–Canada FTA, 1989); 62.5% (NAFTA, phased in); 66% / 69% / 72% / 75% (USMCA, 2020–2023) | USMCA Chapter 4 (Automotive Appendix); Congressional Research Service |
+| Share of U.S. imports entering duty-free under USMCA: ≈50% (Mexico) and <40% (Canada) before the 2025 tariffs, ≈80% by July 2025 (the site plots "<40%" at 38%) | Federal Reserve Bank of Dallas, "How USMCA compliance cushioned the 2025 tariff shock," Aug. 4, 2026 |
+| 94.7% of vehicle imports from Canada and Mexico claimed USMCA in 2025 | USTR, 2026 USMCA Autos Report to Congress |
+| Chinese EVs: U.S. 100% Section 301 tariff (2024) plus 2.5% MFN = 102.5% | USTR, Section 301 four-year review (May 2024) |
+| Chinese EVs: Canada 100% surtax from Oct. 1, 2024 (106.1% with 6.1% MFN); Jan. 2026 quota of 49,000 vehicles a year at 6.1% | Government of Canada; CNBC, Jan. 17, 2026 |
+| Chinese EVs: Mexico up to 50% on vehicles from countries without a trade agreement, from Jan. 1, 2026 | LIGIE reform, DOF Dec. 29, 2025 (Thomson Reuters, Dec. 15, 2025) |
+
 ## People and culture
 
 | Claim | Source |
@@ -85,7 +116,12 @@ Population 2025: North America 521M; EU 448M; China 1,414M.
 
 ## Lineage and theory
 
-Viner (1950); Balassa (1961); Kemp & Wan (1976); Krueger (1993, 1997); Serra, Noyola et al. (1997); Pastor (2001); Dobson (2002); Council on Foreign Relations Task Force (2005: "boundaries … defined by a common external tariff and an outer security perimeter"; CET negotiated sector by sector "at the lowest rate consistent with multilateral obligations"); Anson et al. (2005); Carrère & de Melo (2006); Broda, Limão & Weinstein (2008); Koopman, Wang & Wei (2014); Levy & López-Calva (2023). Full citations on `foundations.html`.
+Viner (1950); Balassa (1961); Kemp & Wan (1976); Krueger (1993, 1997); Serra, Noyola et al. (1997); Serra Puche (2015); Pastor (2001); Dobson (2002); Council on Foreign Relations Task Force (2005: "boundaries … defined by a common external tariff and an outer security perimeter"; CET negotiated sector by sector "at the lowest rate consistent with multilateral obligations"); Anson et al. (2005); Carrère & de Melo (2006); Broda, Limão & Weinstein (2008); Koopman, Wang & Wei (2014); Levy & López-Calva (2023). Full citations on `foundations.html`.
+
+## Logo and footer note
+
+- Logo: monarch butterfly icon by Sara Saedi, from the Noun Project, with the credit text removed from the SVG. Free Noun Project icons are licensed CC BY 3.0, which requires this credit somewhere; a Noun Project Pro license removes that requirement.
+- Footer note ("The monarch crosses all three countries every year"): the eastern monarch migration runs from southern Canada and the northern U.S. to the Monarch Butterfly Biosphere Reserve in Mexico (UNESCO World Heritage List no. 1290).
 
 ## Policy context
 
@@ -96,3 +132,5 @@ Viner (1950); Balassa (1961); Kemp & Wan (1976); Krueger (1993, 1997); Serra, No
 
 - Author bios (foundations page): confirm wording; add photos if desired.
 - Tariff table: confirm the Canadian truck rate (6.1%) and Mexico's 2026 rate for pickups (50%) against the official schedules.
+- 2025 stress test: Canada's pre-tariff USMCA share is "under 40%"; the chart plots it at 38%.
+- Logo license: keep the Noun Project credit above, or license the icon.

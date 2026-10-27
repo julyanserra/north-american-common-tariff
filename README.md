@@ -10,30 +10,33 @@ The vision is based on the proposal of Jaime Serra Puche and Pedro Noyola, *A Ca
 
 | Section | What it shows |
 |---|---|
-| Hero | Map of the three countries; on scroll the internal borders fade and a single perimeter remains |
+| Hero | Plays once on load: "Three tariffs." is struck out and replaced by "One market." while the map's internal borders fade to a single perimeter (with a replay link) |
+| The union in one sentence | One large sentence with inline chips (country silhouettes, the perimeter, a truck, a factory, a mini population pyramid, the monarch) |
 | 01 The union at a glance | Five changes (common tariff, free circulation, shared rules, shared revenue, one voice) and what stays national |
-| 02 The common tariff | A sample common tariff schedule: today's rates in CA / US / MX and where the common rate lands, with the rules that set it |
-| 03 One perimeter | Ports of entry vs internal crossings, plus a "today vs in the union" journey of one part |
-| 04 Demographic advantage | Combined population pyramid (2025 / 2050) and working-age change vs EU, China, Japan, India |
-| 05 Built in North America | Nearshoring, shared production, energy, each country's role |
+| 02 The common tariff | A sample common tariff schedule (CA / US / MX today and the common rate), the rules that set it, and today's three EV tariffs toward China |
+| 03 One perimeter | Ports of entry vs internal crossings, a "today vs in the union" journey, the rules-of-origin ratchet (1989–2023) and the 2025 stress test |
+| 04 Built in North America | Serra Puche's 2015 charts brought up to date (exports, FDI, openness), the 2017→2024 shift in U.S. imports, energy and shipping facts |
+| 05 Demographic advantage | Working-age index 2000–2050 (NA vs China, EU, Japan), combined pyramid (2025 / 2050), dependency ratios, median ages |
 | 06 Neighbors already | Shared faith, languages and families; managed circular mobility |
 | 07 One voice in the world | North America vs EU vs China |
-| 08 How we get there | The five implementation stages and the timeline |
+| 08 How we get there | 2015's "Customs union (???)" answered in 2025; the five stages and the timeline |
 | 09 Questions | Straight answers to hard questions |
 | 10 Built on research | Link to the foundations page |
 
-**`foundations.html` — the evidence**: the proposal in the authors' words, a lineage of proposals (Viner 1950 → CFR 2005 → Noyola & Serra 2025), the evidence behind every claim, data and methods, and a full bibliography.
+**`foundations.html` — the evidence**: the proposal in the authors' words, a lineage of proposals (Viner 1950 → CFR 2005 → Serra Puche 2015 → Noyola & Serra 2025), the evidence behind every claim, data and methods, and a full bibliography.
 
 ## Tech
 
-Plain HTML, CSS and vanilla JavaScript. No build step. Fonts: Archivo, Public Sans, IBM Plex Mono (Google Fonts).
+Plain HTML, CSS and vanilla JavaScript. No build step. Fonts: Space Grotesk, Inter, JetBrains Mono (Google Fonts), matching julianserra.xyz.
+
+The logo is a monarch butterfly, the one traveler that already crosses all three countries every year. Hovering the footer logo reveals a short note. On phones the section links and the language switch live in the menu, and wide charts switch to a narrow layout with larger type.
 
 ```
 index.html, foundations.html
 assets/css/styles.css
 assets/js/data.js     # generated: map geometry + UN population data (see tools/)
 assets/js/i18n.js     # Spanish translations (English lives in the HTML)
-assets/js/main.js     # map animation, tariff schedule, charts, toggles, language switch
+assets/js/main.js     # hero animation, chips, tariff schedule, charts, menu, language switch
 assets/img/           # favicon, social share image
 tools/                # scripts that regenerate data.js
 SOURCES.md            # every figure and its source
