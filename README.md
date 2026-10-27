@@ -11,7 +11,7 @@ The vision is based on Noyola & Serra, *A Case for a North American Common Tarif
 | Section | What it shows |
 |---|---|
 | Hero | Plays once on load: "Three tariffs." is struck out and replaced by "One market." while the map's internal borders fade to a single perimeter (with a replay link) |
-| The union in one sentence | One large sentence with inline chips (country silhouettes, the perimeter, a truck, a factory, a mini population pyramid, a rising line, a rook): economic gain and competitive weight, in the terms of the 2025 proposal |
+| The union in one sentence | One large sentence with inline chips (country silhouettes, the perimeter, a truck, a factory, a mini population pyramid, a rising line, a rook): economic gain and competitive weight, in the terms of the 2025 proposal. Each chip reacts on hover, shows the name of the section it stands for, and jumps there on click |
 | 01 The union at a glance | Five changes (common tariff, free circulation, shared rules, shared revenue, one trade policy) and what stays national |
 | 02 The common tariff | A sample common tariff schedule (CA / US / MX today and the common rate), the rules that set it, and today's three EV tariffs toward China |
 | 03 One perimeter | Ports of entry vs internal crossings, a "today vs in the union" journey, the rules-of-origin ratchet (1989–2023) and the 2025 stress test |
@@ -20,11 +20,25 @@ The vision is based on Noyola & Serra, *A Case for a North American Common Tarif
 | 05 Demographic advantage | Working-age index 2000–2050 (NA vs China, EU, Japan), combined pyramid (2025 / 2050), dependency ratios, median ages |
 | 06 Neighbors already | Shared faith, languages and families; managed circular mobility |
 | 07 Competing in the world | North America vs EU vs China |
-| 08 How we get there | 2015's "Customs union (???)" answered in 2025; the five stages and the timeline |
+| 08 How we get there | The five stages and the timeline, 1965 → 2027 |
 | 09 Questions | Straight answers to hard questions |
 | 10 Built on research | Link to the foundations page |
 
-**`foundations.html` — the evidence**: the proposal in the authors' words, a lineage of proposals (Viner 1950 → CFR 2005 → Serra Puche 2015 → Noyola & Serra 2025), the evidence behind every claim, data and methods, and a full bibliography.
+Every section ends its header with a link to its evidence on the foundations page ("The evidence: …"), and each piece of evidence links back.
+
+**`foundations.html` — the evidence**
+
+| Section | What it shows |
+|---|---|
+| Contents | Counts (claims, questions, figures, sources) and a card for each section |
+| 01 The argument | Six numbered steps from a free trade area to a customs union, each linked to its evidence (E1–E10) and to the vision page |
+| 02 The proposal | Noyola & Serra (2025) in their own words; author bios |
+| 03 Lineage | Viner 1950 → Noyola & Serra 2025, each entry tagged by kind |
+| 04 Evidence | Ten claims in the order of the argument (`#ev-…` anchors), each with a key figure, sources tagged Theory / Study / Data / Policy / Proposal, and a link back to the vision page |
+| 05 Open questions | Six objections (U.S. tariff control, Mexico's position, trade diversion, revenue, farm goods, Mexico's productivity) and the replies |
+| 06 Fact sheet | Every number on the vision page with its value and source; search, section filter, CSV download |
+| 07 Data & methods | How each figure was built; links to the scripts on GitHub |
+| 08 Bibliography | Sources grouped (proposals, theory, studies, official data and policy) with search, and a copyable citation for the page |
 
 ## Tech
 
@@ -37,7 +51,7 @@ index.html, foundations.html
 assets/css/styles.css
 assets/js/data.js     # generated: map geometry + UN population data (see tools/)
 assets/js/i18n.js     # Spanish translations (English lives in the HTML)
-assets/js/main.js     # hero animation, chips, tariff schedule, charts, scrambled egg canvas, menu, language switch
+assets/js/main.js     # hero, chips, tariff schedule, charts, scrambled egg canvas, fact sheet, bibliography search, menu, language switch
 assets/img/           # favicon, social share image
 tools/                # scripts that regenerate data.js
 SOURCES.md            # every figure and its source
@@ -55,6 +69,7 @@ python3 -m http.server 8000
 - **English copy:** edit the HTML directly.
 - **Spanish copy:** each translatable element has `data-i18n="key"`; edit that key in `assets/js/i18n.js`.
 - **Tariff schedule rows:** `SCHEDULE` in `assets/js/main.js` (names and rule text are i18n keys `sch.p.*`, `sch.rule.*`).
+- **Fact sheet rows:** `FACTS` in `assets/js/main.js` (labels are i18n keys `fs.f.*`, in both `en` and `es`). Keep it in step with `SOURCES.md`.
 
 ### Deploy
 

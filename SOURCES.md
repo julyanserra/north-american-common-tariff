@@ -1,6 +1,6 @@
 # Sources and fact sheet
 
-Every figure on the site and where it comes from. The same material is presented for readers on `foundations.html`.
+Every figure on the site and where it comes from. The same material is presented for readers on `foundations.html`, whose fact sheet (`FACTS` in `assets/js/main.js`) lists every number on the vision page.
 
 **[NS]** Pedro Noyola and Jaime Serra, *A Case for a North American Common Tariff*, Wilson Center, Mexico Institute, March 2025.
 
@@ -81,7 +81,7 @@ Jaime Serra Puche, *El TLC y la formación de una región / The NAFTA and the Bu
 | Trade openness (exports + imports, % of GDP) | ≈20% before 1986; ≈30% after GATT | 74% (2024) | World Bank WDI, NE.TRD.GNFS.ZS |
 | Workforce: North America vs China | NA overtakes China ≈2014–15 | China's 15–64 population peaked in 2014; 2050 index (2000 = 100): NA 132, China 84, EU 82, Japan 62 | UN WPP 2024 (estimates to 2023, medium variant after) |
 | Dependents per working-age person | 2012 | 2025 → 2050: MX 0.48 → 0.53, US 0.55 → 0.64, CA 0.55 → 0.64, NA 0.53 → 0.61, China 0.43 → 0.70 | UN WPP 2024 |
-| "Unión Aduanera (???)" closing slide | question | answered by Noyola & Serra (2025) | [NS] |
+| "Unión Aduanera (???)" closing slide | question | timeline entry "NAFTA at 20: is a customs union next?" (2015) | [NS] |
 
 Not reproduced, for lack of comparable recent data: U.S. content in Mexican exports (2004) and business-cycle correlation (1981–2013).
 

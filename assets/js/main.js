@@ -178,8 +178,10 @@
   };
   function buildChips() {
     var chips = $$(".chip[data-chip]");
+    var revealed = !!$(".statement-text.in");
     chips.forEach(function (c, i) {
-      c.style.transitionDelay = (0.15 + i * 0.09).toFixed(2) + "s";
+      c.style.transitionDelay = revealed ? "" : (0.15 + i * 0.09).toFixed(2) + "s";
+      c.setAttribute("aria-label", chipLabel(c));
       if (c.firstChild) return;
       var k = c.dataset.chip;
       c.classList.add("chip-" + k.toLowerCase());
@@ -191,6 +193,40 @@
     });
   }
   langListeners.push(buildChips);
+  // Each chip links to the part of the page it stands for; its label is that part's kicker.
+  function chipLabel(c) {
+    var target = $(c.getAttribute("href") || "");
+    if (!target) return "";
+    var k = $(".kicker", target) || $("h3", target);
+    return k ? k.textContent.trim() : "";
+  }
+  var chipTip = null;
+  function showChipTip(c) {
+    var host = c.closest(".wrap");
+    if (!host) return;
+    if (!chipTip) {
+      chipTip = document.createElement("span");
+      chipTip.className = "chip-tip mono";
+      chipTip.setAttribute("aria-hidden", "true");
+    }
+    if (chipTip.parentNode !== host) host.appendChild(chipTip);
+    chipTip.textContent = chipLabel(c) + " →";
+    var r = c.getBoundingClientRect(), h = host.getBoundingClientRect();
+    chipTip.style.left = (r.left + r.width / 2 - h.left) + "px";
+    chipTip.style.top = (r.top - h.top) + "px";
+    chipTip.classList.add("on");
+  }
+  function hideChipTip() { if (chipTip) chipTip.classList.remove("on"); }
+  var statementText = $(".statement-text");
+  if (statementText) {
+    ["mouseover", "focusin"].forEach(function (ev) {
+      statementText.addEventListener(ev, function (e) { var c = e.target.closest(".chip"); if (c) showChipTip(c); });
+    });
+    ["mouseout", "focusout"].forEach(function (ev) {
+      statementText.addEventListener(ev, function (e) { if (e.target.closest(".chip") && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(".chip") === e.target.closest(".chip"))) hideChipTip(); });
+    });
+    window.addEventListener("scroll", hideChipTip, { passive: true });
+  }
 
   /* ───────────────────────── Perimeter map ───────────────────────── */
   function buildPerimeterMap() {
@@ -587,32 +623,6 @@
   });
   langListeners.push(buildPyramid);
 
-  /* ───────────────────────── 2015 → 2025: the question mark answered ───────────────────────── */
-  var venn = $("#venn");
-  function buildVenn() {
-    if (!venn) return;
-    var merged = venn.classList.contains("merged");
-    venn.innerHTML = "";
-    el("circle", { cx: 260, cy: 225, r: 172, fill: "#d9731c", "class": "v-one" }, venn);
-    [["v-us", 200, 170, C.US], ["v-ca", 320, 170, C.CA], ["v-mx", 260, 275, C.MX]].forEach(function (c) {
-      el("circle", { cx: c[1], cy: c[2], r: 120, fill: c[3], "fill-opacity": 0.42, stroke: c[3], "stroke-width": 2, "class": "v-circle " + c[0] }, venn);
-    });
-    txt(venn, 120, 40, t("map.us"), { "text-anchor": "middle", "class": "v-label" });
-    txt(venn, 400, 40, "Canada", { "text-anchor": "middle", "class": "v-label" });
-    txt(venn, 260, 425, t("map.mx"), { "text-anchor": "middle", "class": "v-label" });
-    txt(venn, 260, 214, t("q.cu"), { "text-anchor": "middle", "class": "v-q" });
-    txt(venn, 260, 240, "(???)", { "text-anchor": "middle", "class": "v-q" });
-    txt(venn, 260, 222, t("q.cu"), { "text-anchor": "middle", "class": "v-a" });
-    txt(venn, 260, 252, "2025", { "text-anchor": "middle", "class": "v-a", style: "font-size:16px" });
-    if (merged) venn.classList.add("merged");
-  }
-  langListeners.push(buildVenn);
-  var replay = $("#venn-replay");
-  if (replay && venn) replay.addEventListener("click", function () {
-    venn.classList.remove("merged");
-    setTimeout(function () { venn.classList.add("merged"); }, 1400);
-  });
-
   /* ───────────────────────── The scrambled egg theorem ───────────────────────── */
   // One set of dots moves through four states: three eggs (1993), one scramble held
   // together by supply-chain links, a pull back toward the eggs that snaps back, and one
@@ -900,6 +910,143 @@
     setEggState(+eggSteps[active].dataset.state);
   }
 
+  /* ───────────────────────── Foundations: fact sheet ───────────────────────── */
+  // Every figure on the vision page: [section, key (label is t("fs.f." + key)), value, source, link].
+  // A source given as [en, es] is translated; links point to the primary source where one exists.
+  var FS_SECTIONS = { world: "#world", tariff: "#tariff", perimeter: "#perimeter", economy: "#economy", theorem: "#theorem", people: "#demography" };
+  var NS_URL = "https://www.wilsoncenter.org/article/case-north-american-common-tariff";
+  var FACTS = [
+    ["world", "w1", "521M", "UN WPP 2024"],
+    ["world", "w2", "≈$33T · ≈$19T · ≈$19T", ["IMF; national accounts", "FMI; cuentas nacionales"]],
+    ["world", "w3", "≈30%", ["IMF", "FMI"]],
+    ["world", "w4", "37.3 · 45.5 · 41.4", "UN WPP 2024"],
+    ["world", "w5", "+5% · −17% · −25%", "UN WPP 2024"],
+    ["tariff", "t1", "2,278 (40.6%)", "Noyola & Serra (2025)", NS_URL],
+    ["tariff", "t2", "61% · 66%", "Noyola & Serra (2025)", NS_URL],
+    ["tariff", "t3", "≈$500B · ≈$400B", "Noyola & Serra (2025)", NS_URL],
+    ["tariff", "t4", "30–50%", "Noyola & Serra (2025)", NS_URL],
+    ["tariff", "t5", "3.8% · 3.4% · 11.1%", "WTO Tariff & Trade Data"],
+    ["tariff", "t6", "102.5% · 106.1% · 6.1% · 50%", ["USTR; Government of Canada; DOF", "USTR; Gobierno de Canadá; DOF"]],
+    ["tariff", "t7", "49,000", ["Government of Canada (2026)", "Gobierno de Canadá (2026)"]],
+    ["perimeter", "p1", "1–3%", "Noyola & Serra (2025)", NS_URL],
+    ["perimeter", "p2", "50% · 62.5% · 75%", ["USMCA Ch. 4; CRS", "T-MEC cap. 4; CRS"]],
+    ["perimeter", "p3", "≈50% · <40%", "Federal Reserve Bank of Dallas (2026)", "https://www.dallasfed.org/research/economics/2026/0804"],
+    ["perimeter", "p4", "≈80%", "Federal Reserve Bank of Dallas (2026)", "https://www.dallasfed.org/research/economics/2026/0804"],
+    ["perimeter", "p5", "94.7%", "USTR (2026)", "https://ustr.gov/sites/default/files/files/agreements/FTA/USMCA/2026%20USMCA%20Autos%20Report%20to%20Congress_070126.pdf"],
+    ["economy", "e1", "$0.12B · $0.92B · $1.76B", "Serra Puche (2015); INEGI"],
+    ["economy", "e2", "$2.9B · $19.3B · $40.9B", "Serra Puche (2015); Secretaría de Economía", "https://www.gob.mx/se/prensa/mexico-alcanza-cifra-historica-de-inversion-extranjera-directa-en-2025-40-871-millones-de-dolares-crecio-un-10-8-anual"],
+    ["economy", "e3", "74%", ["World Bank", "Banco Mundial"]],
+    ["economy", "e4", "$505.6B → $438.9B", "U.S. Census Bureau; BLS"],
+    ["economy", "e5", "$314.0B → $505.9B", "U.S. Census Bureau; BLS"],
+    ["economy", "e6", "$300.0B → $412.7B", "U.S. Census Bureau; BLS"],
+    ["economy", "e7", "$1.6T · 2.7×", "U.S. Census Bureau"],
+    ["economy", "e8", "$10,166", "Drewry World Container Index", "https://www.drewry.co.uk/supply-chain-advisors/world-container-index-weekly-update"],
+    ["economy", "e9", "60%", "U.S. EIA"],
+    ["economy", "e10", "6.4 Bcf/d", "U.S. EIA"],
+    ["theorem", "s1", "$293B · $1.6T", "U.S. Census Bureau", "https://www.census.gov/foreign-trade/balance/c2010.html"],
+    ["theorem", "s2", "7–8", "CRS IF11387 (2021)", "https://www.congress.gov/crs-product/IF11387"],
+    ["theorem", "s3", "≈40¢", "Koopman, Wang & Wei (2014)"],
+    ["people", "h1", "30.8 · 39.6 · 41.7", "UN WPP 2024"],
+    ["people", "h2", "2014", "UN WPP 2024"],
+    ["people", "h3", "0.53 → 0.61", "UN WPP 2024"],
+    ["people", "h4", "89% · 62% · 53%", "INEGI 2020; Pew 2023–24; StatCan 2021"],
+    ["people", "h5", "43M", "ACS 2023"],
+    ["people", "h6", "37M", ["Pew Research Center (2021 data)", "Pew Research Center (datos de 2021)"]],
+    ["people", "h7", "≈800,000", ["INEGI, 2020 census", "INEGI, censo 2020"]]
+  ];
+  var fsSec = "all";
+  function fold(s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+  function factSource(f) { return Array.isArray(f[3]) ? f[3][current === "es" ? 1 : 0] : f[3]; }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+  function visibleFacts() {
+    var q = fold(($("#fs-q") || {}).value || "");
+    return FACTS.filter(function (f) {
+      if (fsSec !== "all" && f[0] !== fsSec) return false;
+      return !q || fold([t("fs.sec." + f[0]), t("fs.f." + f[1]), f[2], factSource(f)].join(" ")).indexOf(q) >= 0;
+    });
+  }
+  function renderFacts() {
+    var body = $("#fs-rows");
+    if (!body) return;
+    var rows = visibleFacts();
+    body.innerHTML = rows.map(function (f) {
+      var src = esc(factSource(f));
+      return '<tr><td class="fs-sec"><a href="index.html' + FS_SECTIONS[f[0]] + '">' + esc(t("fs.sec." + f[0])) + "</a></td>" +
+        "<td>" + esc(t("fs.f." + f[1])) + '</td><td class="fs-val">' + esc(f[2]) + "</td>" +
+        '<td class="fs-src">' + (f[4] ? '<a href="' + f[4] + '" target="_blank" rel="noopener">' + src + " ↗</a>" : src) + "</td></tr>";
+    }).join("");
+    var n = $("#fs-count");
+    if (n) n.textContent = t("fs.count").replace("{n}", rows.length).replace("{m}", FACTS.length);
+    // The section links keep the chosen language.
+    if (current === "es") $$("a", body).forEach(function (a) { if (a.getAttribute("href").indexOf("index.html") === 0) a.setAttribute("href", a.getAttribute("href").replace("index.html", "index.html?lang=es")); });
+  }
+  function buildFactSheet() {
+    var chips = $("#fs-chips");
+    if (!chips) return;
+    chips.innerHTML = ["all"].concat(Object.keys(FS_SECTIONS)).map(function (k) {
+      return '<button type="button" data-sec="' + k + '" aria-pressed="' + (k === fsSec) + '">' + esc(k === "all" ? t("fs.all") : t("fs.sec." + k)) + "</button>";
+    }).join("");
+    $("#fs-q").placeholder = t("fs.ph");
+    renderFacts();
+  }
+  if ($("#fs-chips")) {
+    $("#fs-chips").addEventListener("click", function (e) {
+      var b = e.target.closest("button");
+      if (!b) return;
+      fsSec = b.dataset.sec;
+      $$("#fs-chips button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      renderFacts();
+    });
+    $("#fs-q").addEventListener("input", renderFacts);
+    $("#fs-csv").addEventListener("click", function () {
+      var cell = function (v) { return '"' + String(v).replace(/"/g, '""') + '"'; };
+      var lines = [$$(".fs-table th").map(function (th) { return th.textContent; }).concat("URL").map(cell).join(",")];
+      visibleFacts().forEach(function (f) { lines.push([t("fs.sec." + f[0]), t("fs.f." + f[1]), f[2], factSource(f), f[4] || ""].map(cell).join(",")); });
+      var url = URL.createObjectURL(new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" }));
+      var a = document.createElement("a");
+      a.href = url; a.download = t("fs.file") + ".csv";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    });
+    langListeners.push(buildFactSheet);
+  }
+
+  /* ───────────────────────── Foundations: bibliography search, counts, citation ───────────────────────── */
+  function filterBiblio() {
+    var input = $("#b-q");
+    if (!input) return;
+    var q = fold(input.value), shown = 0, all = $$(".biblio li");
+    $$(".biblio-group").forEach(function (g) {
+      var n = 0;
+      $$("li", g).forEach(function (li) { var on = !q || fold(li.textContent).indexOf(q) >= 0; li.hidden = !on; if (on) n++; });
+      g.hidden = n === 0;
+      $(".bg-n", g).textContent = n;
+      shown += n;
+    });
+    $("#b-count").textContent = t("b.count").replace("{n}", shown).replace("{m}", all.length);
+  }
+  if ($("#b-q")) {
+    $("#b-q").addEventListener("input", filterBiblio);
+    langListeners.push(function () { $("#b-q").placeholder = t("b.ph"); filterBiblio(); });
+  }
+  $$("[data-count]").forEach(function (n) {
+    var c = { claims: $$(".theme").length, questions: $$(".oq").length, facts: FACTS.length, sources: $$(".biblio li").length }[n.dataset.count];
+    if (c) n.textContent = c;
+  });
+  var citeText = $("#cite-text");
+  if (citeText) {
+    var setCite = function () { citeText.textContent = t("cite.text").replace("{url}", window.location.origin + window.location.pathname); };
+    langListeners.push(setCite);
+    $("#cite-copy").addEventListener("click", function () {
+      var b = this;
+      if (!navigator.clipboard) return;
+      navigator.clipboard.writeText(citeText.textContent).then(function () {
+        b.textContent = t("cite.copied");
+        setTimeout(function () { b.textContent = t("cite.copy"); }, 2000);
+      });
+    });
+  }
+
   /* ───────────────────────── Footer easter egg ───────────────────────── */
   // Hover or focus reveals it; a tap toggles it on touch screens.
   $$(".egg").forEach(function (b) { b.addEventListener("click", function () { b.classList.toggle("on"); }); });
@@ -912,7 +1059,8 @@
     if ($(".steps", node)) growSteps(node);
     if ($("#slope", node)) growSlope();
     if ($("#wa-line", node)) drawPaths($("#wa-line", node));
-    if ($("#venn", node)) setTimeout(function () { venn.classList.add("merged"); }, reduceMotion ? 0 : 1500);
+    // Once the chips have popped in, hovering them should react without the stagger.
+    if (node.classList.contains("statement-text")) setTimeout(function () { $$(".chip", node).forEach(function (c) { c.style.transitionDelay = ""; }); }, reduceMotion ? 0 : 1500);
   }
   var revealables = $$(".reveal");
   revealables.forEach(function (n) {
