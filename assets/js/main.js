@@ -181,7 +181,7 @@
     var revealed = !!$(".statement-text.in");
     chips.forEach(function (c, i) {
       c.style.transitionDelay = revealed ? "" : (0.15 + i * 0.09).toFixed(2) + "s";
-      c.setAttribute("aria-label", chipLabel(c));
+      if (c.hasAttribute("href")) c.setAttribute("aria-label", chipLabel(c));
       if (c.firstChild) return;
       var k = c.dataset.chip;
       c.classList.add("chip-" + k.toLowerCase());
@@ -195,7 +195,8 @@
   langListeners.push(buildChips);
   // Each chip links to the part of the page it stands for; its label is that part's kicker.
   function chipLabel(c) {
-    var target = $(c.getAttribute("href") || "");
+    var href = c.getAttribute("href");
+    var target = href && $(href);
     if (!target) return "";
     var k = $(".kicker", target) || $("h3", target);
     return k ? k.textContent.trim() : "";
@@ -229,16 +230,17 @@
   }
 
   /* ───────────────────────── Perimeter map ───────────────────────── */
+  // Styling that changes with the "Today / In the union" toggle lives in CSS (classes pm-*, rt-*).
   function buildPerimeterMap() {
     var svg = $("#per-map");
     if (!svg || !MAP) return;
     svg.setAttribute("viewBox", MAP.viewBox);
     el("path", { d: MAP.context, fill: "#e3ddd0" }, svg);
     ["CA", "US", "MX"].forEach(function (k) {
-      el("path", { d: MAP[k], fill: "#fbfaf6", stroke: "#a84b0a", "stroke-width": 1.6, "stroke-linejoin": "round" }, svg);
+      el("path", { d: MAP[k], "class": "pm-land", "stroke-linejoin": "round" }, svg);
     });
-    el("path", { d: MAP.borders, fill: "none", stroke: "#fbfaf6", "stroke-width": 4 }, svg);
-    el("path", { d: MAP.borders, fill: "none", stroke: "#9a948a", "stroke-width": 1.2, "stroke-dasharray": "4 5" }, svg);
+    el("path", { d: MAP.borders, "class": "pm-cover" }, svg);
+    el("path", { d: MAP.borders, "class": "pm-border" }, svg);
     var P = MAP.ports;
     [["vancouver", "Vancouver", -16, -6, "end"], ["la", "Los Angeles", -16, 7, "end"], ["houston", "Houston", 14, 26, "start"],
      ["savannah", "Savannah", 16, 7, "start"], ["ny", "New York", 16, 12, "start"], ["halifax", "Halifax", 16, 7, "start"],
@@ -248,12 +250,124 @@
       el("circle", { cx: xy[0], cy: xy[1], r: 7, fill: "#a84b0a" }, svg);
       txt(svg, xy[0] + p[2], xy[1] + p[3], p[1], { "text-anchor": p[4], "class": "port-label" });
     });
+    buildRoute(svg);
     [["laredo", "Laredo", -16, 2, "end"], ["detroit", "Detroit", -14, -12, "end"]].forEach(function (p) {
       var xy = P[p[0]];
-      el("circle", { cx: xy[0], cy: xy[1], r: 8, fill: "#f2efe8", stroke: "#191714", "stroke-width": 3 }, svg);
+      el("circle", { cx: xy[0], cy: xy[1], r: 8, "class": "pm-x" }, svg);
       txt(svg, xy[0] + p[2], xy[1] + p[3], p[1], { "text-anchor": p[4], "class": "port-label" });
     });
+    var m = P.monterrey;
+    el("circle", { cx: m[0], cy: m[1], r: 6, fill: "#191714" }, svg);
+    txt(svg, m[0] + 14, m[1] + 22, "Monterrey", { "class": "port-label" });
+    svg.appendChild(rt.dot);
   }
+
+  /* ───────────────────────── Perimeter: one shipment, today and in the union ───────────────────────── */
+  // A part travels Asia → Manzanillo → Monterrey → Laredo → Detroit. Today it stops at Laredo
+  // for customs; in the union it drives straight through. Dwell times are illustrative.
+  var RT = { start: [330, 818], stops: ["manzanillo", "monterrey", "laredo", "detroit"], ctrl: [[415, 838], [522, 765], null, [602, 566]] };
+  var RT_DWELL = { fta: [1200, 900, 2600, 1400], cu: [1000, 450, 0, 1400] };
+  var RT_SPEED = 0.13, RT_REST = 1200, RT_SHOW = 1200;
+  var rt = null;
+  function buildRoute(svg) {
+    var P = MAP.ports, d = "M" + RT.start.join(","), prev = RT.start, lens = [0], acc = 0;
+    var g = el("g", { "class": "rt" }, svg);
+    RT.stops.forEach(function (k, i) {
+      var p = P[k], c = RT.ctrl[i];
+      var seg = c ? "Q" + c.join(",") + " " + p.join(",") : "L" + p.join(",");
+      var probe = el("path", { d: "M" + prev.join(",") + " " + seg }, g);
+      acc += probe.getTotalLength(); lens.push(acc);
+      g.removeChild(probe);
+      d += " " + seg; prev = p;
+    });
+    el("path", { d: d, "class": "rt-bg" }, g);
+    var trail = el("path", { d: d, "class": "rt-trail" }, g);
+    trail.style.strokeDasharray = acc + " " + acc;
+    trail.style.strokeDashoffset = acc;
+    // Customs at Laredo: a barrier across the road, lifted in the union.
+    var L = P.laredo;
+    el("rect", { x: L[0] - 20, y: L[1] - 5, width: 40, height: 10, rx: 4, "class": "rt-gate", transform: "rotate(-62 " + L[0] + " " + L[1] + ")" }, g);
+    var rings = RT.stops.map(function (k) { return el("circle", { cx: P[k][0], cy: P[k][1], r: 18, "class": "rt-ring" }, g); });
+    el("circle", { cx: RT.start[0], cy: RT.start[1], r: 6, "class": "rt-start" }, g);
+    var asia = txt(g, RT.start[0] - 4, RT.start[1] + 34, "", { "text-anchor": "middle", "class": "port-label rt-asia" });
+    var dot = el("g", { "class": "rt-dot" });
+    el("circle", { r: 12 }, dot);
+    el("rect", { x: -5, y: -5, width: 10, height: 10, rx: 1.5 }, dot);
+    rt = { trail: trail, len: acc, lens: lens, rings: rings, dot: dot, asia: asia, mode: "fta", t0: 0, raf: 0, visible: false, on: -2 };
+    rtPlan();
+    rtLabels();
+  }
+  // Moves between stops ease out of a stop and into the next one; a stop with no dwell is driven through.
+  function rtPlan() {
+    var dw = RT_DWELL[rt.mode], t = 0, moves = [], windows = [];
+    for (var i = 0; i < RT.stops.length; i++) {
+      var a = rt.lens[i], b = rt.lens[i + 1], dur = (b - a) / RT_SPEED;
+      var fromRest = i === 0 || dw[i - 1] > 0, toRest = dw[i] > 0;
+      moves.push({ t0: t, t1: t + dur, a: a, b: b, e: fromRest && toRest ? ease : fromRest ? function (u) { return u * u; } : toRest ? function (u) { return 1 - (1 - u) * (1 - u); } : function (u) { return u; } });
+      t += dur;
+      windows.push([t, t + Math.max(dw[i], RT_SHOW)]);
+      moves.push({ t0: t, t1: t + dw[i], a: b, b: b, e: function () { return 0; } });
+      t += dw[i];
+    }
+    rt.moves = moves; rt.windows = windows; rt.total = t + RT_REST;
+  }
+  function rtLabels() { if (rt) { rt.asia.textContent = t("rt.asia"); rt.on = -2; } }
+  function rtStatus(i) {
+    var box = $("#rt-status");
+    if (!box || i === rt.on) return;
+    rt.on = i;
+    var stops = $$(".stops .stop");
+    stops.forEach(function (li, k) { li.classList.toggle("is-on", k === i); });
+    if (i < 0) { box.innerHTML = '<b class="mono">' + esc(t("rt.go")) + "</b>"; return; }
+    box.innerHTML = '<b class="mono">' + (i + 1) + " · " + esc($("h3", stops[i]).textContent) + "</b> " + esc(t("rt.s" + (i + 1) + "." + rt.mode));
+  }
+  function rtFrame(now) {
+    var e = (now - rt.t0) % rt.total, pos = rt.len, k;
+    for (k = 0; k < rt.moves.length; k++) {
+      var m = rt.moves[k];
+      if (e < m.t1 || k === rt.moves.length - 1) { pos = m.t1 > m.t0 ? lerp(m.a, m.b, m.e(clamp((e - m.t0) / (m.t1 - m.t0)))) : m.b; break; }
+    }
+    rtPlace(pos);
+    // The status and the list follow the last stop reached; the ring pulses while the part is there.
+    var last = -1;
+    rt.windows.forEach(function (w, i) { if (e >= w[0]) last = i; });
+    rtStatus(last);
+    rt.rings.forEach(function (r, i) { r.classList.toggle("on", i === last && e < rt.windows[i][1]); });
+  }
+  function rtPlace(pos) {
+    var p = rt.trail.getPointAtLength(pos);
+    rt.dot.setAttribute("transform", "translate(" + p.x.toFixed(1) + "," + p.y.toFixed(1) + ")");
+    rt.trail.style.strokeDashoffset = (rt.len - pos).toFixed(1);
+  }
+  function rtTick(now) {
+    rt.raf = 0;
+    rtFrame(now);
+    if (rt.visible) rt.raf = requestAnimationFrame(rtTick);
+  }
+  function setRouteMode(mode) {
+    if (!rt) return;
+    rt.mode = mode;
+    var fig = $(".per-map");
+    if (fig) fig.dataset.mode = mode;
+    rtPlan();
+    rt.t0 = performance.now();
+    rt.on = -2;
+    if (reduceMotion) { rtPlace(rt.len); rtStatus(2); }
+    else if (rt.visible && !rt.raf) rt.raf = requestAnimationFrame(rtTick);
+  }
+  function startRoute() {
+    if (!rt) return;
+    var fig = $(".per-map");
+    if (reduceMotion) { rtPlace(rt.len); rtStatus(2); return; }
+    if ("IntersectionObserver" in window && fig) {
+      new IntersectionObserver(function (en) {
+        var was = rt.visible;
+        rt.visible = en[0].isIntersecting;
+        if (rt.visible && !was) { rt.t0 = performance.now(); if (!rt.raf) rt.raf = requestAnimationFrame(rtTick); }
+      }, { threshold: 0.25 }).observe(fig);
+    } else { rt.visible = true; rt.raf = requestAnimationFrame(rtTick); }
+  }
+  langListeners.push(function () { if (rt) { rtLabels(); if (reduceMotion) rtStatus(2); } });
 
   /* ───────────────────────── Common tariff schedule ───────────────────────── */
   // MFN rates for imports from countries without a trade agreement (see SOURCES.md).
@@ -268,56 +382,48 @@
   var SCALE_MAX = 50;
   function pct(v) { return (v === Math.round(v) ? v : v.toFixed(1)) + "%"; }
 
+  // Each product shows three bars (one per country). "In the union" folds them into one
+  // orange bar at the common rate, or into a label where the rate is set jointly.
   function buildSchedule() {
     var host = $("#schedule-rows");
     if (!host) return;
-    host.innerHTML = "";
-    SCHEDULE.forEach(function (r) {
-      var row = document.createElement("div");
-      row.className = "sch-row" + (r.avg ? " avg" : "");
-      var naCell = r.na === null
-        ? '<span class="sch-na">' + t(r.avg ? "sch.lower" : "sch.calibrated") + "<small>" + t(r.avg ? "sch.lower.s" : "sch.calibrated.s") + "</small></span>"
-        : '<span class="sch-na">' + pct(r.na) + "</span>";
-      row.innerHTML =
-        '<span class="sch-prod"><b>' + t("sch.p." + r.key) + "</b>" + (r.hs ? "<span>HS " + r.hs + "</span>" : "<span>" + t("sch.avg.s") + "</span>") + "</span>" +
-        '<span class="sch-rate c-ca" data-c="CA">' + pct(r.ca) + "</span>" +
-        '<span class="sch-rate c-us" data-c="US">' + pct(r.us) + "</span>" +
-        '<span class="sch-rate c-mx" data-c="MX">' + pct(r.mx) + "</span>" +
-        naCell +
-        '<span class="strip" aria-hidden="true"><span class="strip-axis"></span><span class="strip-range"></span>' +
-          '<span class="strip-dot ca"></span><span class="strip-dot us"></span><span class="strip-dot mx"></span>' +
-          (r.na !== null ? '<span class="strip-ring"></span>' : "") +
-          '<span class="strip-tick" style="left:0">0%</span><span class="strip-tick" style="left:100%">50%</span>' +
-        "</span>" +
-        '<span class="sch-rule"><b>' + t("sch.rule." + r.rule + ".t") + "</b> " + t("sch.rule." + r.rule) + "</span>";
-      host.appendChild(row);
-      placeStrip(row, r, false);
-    });
-    var sched = $(".schedule");
-    if (sched && sched.classList.contains("in")) $$(".sch-row", host).forEach(function (row, i) { placeStrip(row, SCHEDULE[i], true); });
-  }
-  function placeStrip(row, r, final) {
-    var x = function (v) { return (v / SCALE_MAX * 100).toFixed(2) + "%"; };
-    var lo = Math.min(r.ca, r.us, r.mx), hi = Math.max(r.ca, r.us, r.mx);
-    var range = $(".strip-range", row);
-    range.style.left = x(lo); range.style.width = ((hi - lo) / SCALE_MAX * 100).toFixed(2) + "%";
-    $(".strip-dot.ca", row).style.left = x(r.ca);
-    $(".strip-dot.us", row).style.left = x(r.us);
-    $(".strip-dot.mx", row).style.left = x(r.mx);
-    var ring = $(".strip-ring", row);
-    if (ring) { ring.style.left = final ? x(r.na) : x(hi); ring.style.opacity = final ? 1 : 0; }
+    host.innerHTML = SCHEDULE.map(function (r) {
+      var one = r.na === null ? 0 : r.na / SCALE_MAX;
+      var cu = r.avg ? t("tb.u.avg") : r.na === null ? t("tb.u.cal") : t("tb.u.same").replace("{v}", pct(r.na));
+      var bars = ["ca", "us", "mx"].map(function (c, i) {
+        return '<div class="tb-bar c-' + c + '" style="--k:' + (r[c] / SCALE_MAX).toFixed(3) + '"><i></i>' +
+          '<span class="v-now"><abbr>' + c.toUpperCase() + "</abbr> " + pct(r[c]) + "</span>" +
+          (i === 0 ? '<span class="v-cu">' + cu + "</span>" : "") + "</div>";
+      }).join("");
+      return '<div class="tb-row' + (r.avg ? " avg" : "") + (r.na === null ? " open" : "") + '">' +
+        '<div class="tb-prod"><b>' + t("sch.p." + r.key) + "</b><span>" + (r.hs ? "HS " + r.hs : t("sch.avg.s")) + "</span></div>" +
+        '<div class="tb-bars" style="--one:' + one.toFixed(3) + '">' + bars + "</div>" +
+        '<div class="tb-rule"><b class="rule-tag mono">' + (r.rule === "X" ? "XXIV" : r.rule) + "</b><span>" + t("sch.rule." + r.rule) + "</span></div>" +
+        "</div>";
+    }).join("");
   }
   langListeners.push(buildSchedule);
+  var sched = $(".schedule");
+  if (sched) {
+    $$(".toggle button", sched).forEach(function (b) {
+      b.addEventListener("click", function () {
+        sched.dataset.mode = b.dataset.view;
+        $$(".toggle button", sched).forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); x.classList.remove("hint"); });
+      });
+    });
+  }
 
-  /* ───────────────────────── EV tariffs: three policies toward China ───────────────────────── */
-  var EV = [["ev.us", "", 102.5, C.US], ["ev.ca1", "ev.ca1s", 106.1, C.CA], ["ev.ca2", "ev.ca2s", 6.1, C.CA], ["ev.mx", "", 50, C.MX]];
+  /* ───────────────────────── The clearest case: one car, three tariffs ───────────────────────── */
+  // [label, sub-label, rate, color, flag]
+  var EV = [["ev.us", "", 102.5, C.US], ["ev.ca1", "ev.ca1s", 106.1, C.CA], ["ev.ca2", "ev.ca2s", 6.1, C.CA, "ev.cheap"], ["ev.mx", "", 50, C.MX]];
   function buildEV() {
     var host = $("#ev-bars");
     if (!host) return;
     host.innerHTML = EV.map(function (r) {
-      return '<div class="hbar"><span class="hbar-name">' + t(r[0]) + (r[1] ? "<small>" + t(r[1]) + "</small>" : "") + '</span>' +
-        '<span class="hbar-track"><span class="hbar-fill" style="background:' + r[3] + '" data-w="' + (r[2] / 110 * 100).toFixed(1) + '%"></span></span>' +
-        '<span class="hbar-val">' + fmt(r[2], r[2] % 1 ? 1 : 0) + "%</span></div>";
+      return '<div class="evb-row' + (r[4] ? " is-cheap" : "") + '" style="--c:' + r[3] + '">' +
+        '<span class="evb-name">' + t(r[0]) + (r[1] ? "<small>" + t(r[1]) + "</small>" : "") + "</span>" +
+        '<span class="evb-track"><span class="evb-fill" data-w="' + (r[2] / 110 * 100).toFixed(1) + '%"></span>' + (r[4] ? '<em class="evb-flag mono">' + t(r[4]) + "</em>" : "") + "</span>" +
+        '<b class="evb-val">' + fmt(r[2], r[2] % 1 ? 1 : 0) + "%</b></div>";
     }).join("");
     if (host.closest(".in")) growFills(host);
   }
@@ -1053,7 +1159,6 @@
 
   /* ───────────────────────── Reveal on scroll ───────────────────────── */
   function onReveal(node) {
-    if (node.classList.contains("schedule")) $$(".sch-row", node).forEach(function (row, i) { placeStrip(row, SCHEDULE[i], true); });
     if ($("#ev-bars", node)) growFills($("#ev-bars", node));
     $$(".dumbbells", node).forEach(growDumbbells);
     if ($(".steps", node)) growSteps(node);
@@ -1082,7 +1187,7 @@
   }
 
   /* ───────────────────────── Journey toggle ───────────────────────── */
-  var toggle = $(".toggle");
+  var toggle = $(".perimeter .toggle");
   var route = $("#journey-panel");
   if (toggle && route) {
     var tabs = $$("[role=tab]", toggle);
@@ -1091,6 +1196,7 @@
       toggle.classList.toggle("is-cu", tab.dataset.mode === "cu");
       route.dataset.mode = tab.dataset.mode;
       route.setAttribute("aria-labelledby", tab.id);
+      setRouteMode(tab.dataset.mode);
     };
     tabs.forEach(function (tab, i) {
       tab.tabIndex = i === 0 ? 0 : -1;
@@ -1175,6 +1281,7 @@
   if (nav && nav.classList.contains("scrolled")) nav.dataset.always = "1";
   buildHeroMap();
   buildPerimeterMap();
+  startRoute();
   buildEgg();
   var initial = new URLSearchParams(window.location.search).get("lang");
   if (!initial) {
