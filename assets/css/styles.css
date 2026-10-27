@@ -227,6 +227,10 @@ section { position: relative; }
   #hero-map { max-height: 100%; height: 100%; }
 }
 @media (max-width: 920px) and (max-height: 760px) { .hero-sub { display: none; } }
+@media (max-width: 920px) and (min-height: 761px) {
+  .hero-cta { display: flex; margin-top: 18px; gap: 10px; }
+  .hero-cta .btn { padding: 11px 16px; font-size: 0.88rem; }
+}
 
 /* ==========================================================================
    01 Union at a glance
@@ -334,7 +338,13 @@ section { position: relative; }
 .ev-union b { color: var(--signal); font-weight: 600; }
 .ev-doors .chart-note { margin-top: 14px; }
 @media (max-width: 960px) { .ev-case { grid-template-columns: 1fr; } }
-@media (max-width: 520px) { .evb-row { grid-template-columns: 92px minmax(0, 1fr) 76px; gap: 10px; } .evb-track { height: 24px; } }
+@media (max-width: 520px) {
+  .evb-row { grid-template-columns: 92px minmax(0, 1fr) 76px; gap: 10px; }
+  .evb-track { height: 24px; }
+  /* The track is too short to hold the label: it drops below the bar. */
+  .evb-row.is-cheap { margin-bottom: 20px; }
+  .evb-flag { left: 0; top: calc(100% + 6px); transform: none; }
+}
 
 .rules { margin-top: 28px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 .rule { padding: 24px; border: 1px solid var(--line-ink); border-radius: var(--radius); }
@@ -567,6 +577,7 @@ section { position: relative; }
 .ribbon .next::before { background: var(--signal); box-shadow: 0 0 0 5px rgba(240, 138, 36, 0.22); }
 .ribbon .next b { color: var(--signal); }
 @media (max-width: 760px) { .ribbon { grid-template-columns: 1fr 1fr 1fr; row-gap: 28px; } }
+@media (max-width: 480px) { .ribbon { grid-template-columns: 1fr 1fr; } }
 
 /* ==========================================================================
    09 FAQ
@@ -846,9 +857,9 @@ a.chip { cursor: pointer; text-decoration: none; outline-offset: 4px; }
 .statement-hint { margin-top: 28px; text-align: center; color: var(--on-paper-muted); font-size: 0.64rem; text-transform: none; letter-spacing: 0.03em; }
 
 /* Links from the vision page to the evidence on the foundations page */
-.ev-link { display: inline-flex; align-items: center; gap: 10px; margin-top: 22px; color: var(--signal); text-decoration: none; text-transform: none; letter-spacing: 0.02em; font-size: 0.72rem; padding-bottom: 3px; border-bottom: 1px solid currentColor; transition: gap 0.25s var(--ease), color 0.2s; }
-.ev-link::after { content: "→"; }
-.ev-link:hover { gap: 16px; }
+.ev-link { display: inline-block; margin-top: 22px; color: var(--signal); text-decoration: none; text-transform: none; letter-spacing: 0.02em; font-size: 0.72rem; line-height: 1.6; padding-bottom: 3px; border-bottom: 1px solid currentColor; transition: color 0.2s; }
+.ev-link::after { content: "→"; display: inline-block; margin-left: 10px; transition: transform 0.25s var(--ease); }
+.ev-link:hover::after { transform: translateX(5px); }
 .paper .ev-link { color: var(--signal-deep); }
 /* Arriving from a chip or a link: the section's kicker pulses once. */
 section[id], figure[id] { scroll-margin-top: 72px; }
@@ -975,15 +986,29 @@ figure:target { animation: arrive-box 1.8s var(--ease) 0.4s; }
 .theorem > div + div .th-s::after { content: " \220E"; color: var(--signal); }
 .egg-sec .chart-note { margin-top: 28px; max-width: 900px; }
 @media (max-width: 900px) {
-  .scrolly { grid-template-columns: 1fr; gap: 0; }
-  /* The canvas sticks under the nav; the steps scroll up beneath it. */
-  .egg-fig { grid-column: 1; grid-row: 1; top: 60px; z-index: 3; background: var(--ink); padding: 10px 0 8px; margin: 0 calc(var(--gutter) * -1); padding-left: var(--gutter); padding-right: var(--gutter); border-bottom: 1px solid var(--line-ink); }
-  .egg-stage { height: min(40vh, 360px); }
-  .egg-state { font-size: 0.95rem; }
-  .egg-steps { grid-row: 2; }
-  .egg-step, .egg-step:first-child { min-height: 78vh; justify-content: flex-start; padding: 7vh 0 0 18px; }
   .theorem { grid-template-columns: 1fr; }
   .theorem > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line-ink); margin-top: 26px; }
+}
+/* Upright phones: the canvas fills the screen and draws in its upper part; each step is a card
+   that slides up over it, so the text gets the whole screen to be read. Phones held sideways
+   keep the side-by-side layout. Keep this query in step with EGG_OVERLAY in main.js. */
+@media (max-width: 900px) and (min-height: 501px) {
+  .scrolly { grid-template-columns: 1fr; gap: 0; }
+  .egg-fig, .egg-steps { grid-column: 1; grid-row: 1; }
+  .egg-fig { align-self: start; top: 60px; z-index: 1; height: calc(100vh - 60px); height: calc(100svh - 60px); display: flex; flex-direction: column; margin: 0 calc(var(--gutter) * -1); padding: 12px var(--gutter) 0; background: var(--ink); }
+  .egg-readout { flex: none; }
+  .egg-stage { flex: 1 1 auto; height: auto; min-height: 0; }
+  .egg-fig figcaption { order: 1; margin: 2px 0 0; }
+  .egg-stage { order: 2; }
+  .egg-state { font-size: 0.98rem; }
+  .egg-steps { position: relative; z-index: 2; pointer-events: none; }
+  .egg-step, .egg-step:first-child { min-height: 100vh; min-height: 100svh; justify-content: flex-end; padding: 0 0 4svh; border: 0; opacity: 1; }
+  .step-card { pointer-events: auto; padding: 18px 18px 20px; border-radius: var(--radius); background: rgba(27, 26, 23, 0.95); border: 1px solid var(--line-ink); border-left: 3px solid var(--signal); box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.35); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  .egg-step h3 { font-size: 1.75rem; margin: 6px 0 10px; }
+  .egg-step p:not(.step-k):not(.egg-stat) { font-size: 1rem; line-height: 1.55; }
+  .egg-stat { margin-top: 14px; }
+  .egg-stat b { font-size: 2.2rem; }
+}
 }
 
 .found { overflow: hidden; }
@@ -997,4 +1022,31 @@ figure:target { animation: arrive-box 1.8s var(--ease) 0.4s; }
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-delay: 0ms !important; transition-duration: 0.001ms !important; transition-delay: 0ms !important; }
   .reveal { opacity: 1; transform: none; }
   .brand-mark { animation: none !important; }
+}
+
+/* ==========================================================================
+   Phones: legible type everywhere (nothing under ~11px), larger map labels
+   ========================================================================== */
+@media (max-width: 600px) {
+  .mono { font-size: 0.78rem; }
+  .chart-note, .src, .chart figcaption p, .hero-map figcaption, .schedule-legend, .tb-sub, .tb-head, .tb-prod span,
+  .per-legend, .rt-status b, .meter-label, .step .mono, .pyr-legend, .ages .label, .egg-fig figcaption, .ev-doors figcaption p,
+  .statement-hint, .kinds, .fs-count, .theme-back, .chain-go .mono, .oq-k, .foot-tri, .egg-note, .share-status, .tag,
+  .f-contents span, .fs-sec a, .fs-table th, .scroll-cue { font-size: 0.7rem; }
+  .route-meter dt { font-size: 0.64rem; }
+  .ev-link { font-size: 0.8rem; }
+  .kind, .lineage .kind { font-size: 0.64rem; }
+  .evb-flag { font-size: 0.64rem; padding: 3px 8px; }
+  .tb-bar span { font-size: 0.86rem; }
+  .tb-bar abbr { font-size: 0.7rem; }
+  .ribbon li { font-size: 0.8rem; }
+  .ribbon b { font-size: 0.95rem; }
+  .db-lab { font-size: 0.74rem; }
+  .chart-tip { font-size: 0.76rem; }
+  .lang button { font-size: 0.78rem; }
+  .map-label { font-size: 30px; stroke-width: 6px; }
+  .map-label.na { font-size: 40px; }
+  #per-map.narrow .port-label { font-size: 30px; stroke-width: 6px; }
+  #per-map.narrow .port-minor { display: none; }
+  #per-map.narrow .rt-ring { stroke-width: 4; }
 }

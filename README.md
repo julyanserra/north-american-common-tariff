@@ -44,7 +44,9 @@ Every section ends its header with a link to its evidence on the foundations pag
 
 Plain HTML, CSS and vanilla JavaScript. No build step. Fonts: Space Grotesk, Inter, JetBrains Mono (Google Fonts), matching julianserra.xyz.
 
-The logo is a monarch butterfly, the one traveler that already crosses all three countries every year. Hovering the footer logo reveals a short note. On phones the section links and the language switch live in the menu, and wide charts switch to a narrow layout with larger type.
+The logo is a monarch butterfly, the one traveler that already crosses all three countries every year. Hovering the footer logo reveals a short note.
+
+**Phones.** The section links and the language switch live in the menu; wide charts switch to a narrow layout with larger type; no text is set below about 11px; touch screens get "tap" instead of "hover" hints. In the scrambled egg section, upright phones get a full-screen canvas that draws in its upper part while each step arrives as a card sliding over it (phones held sideways keep the side-by-side layout; the query lives in both `styles.css` and `EGG_OVERLAY` in `main.js`). On the perimeter map the toggle sits above the map and minor port labels are hidden.
 
 ```
 index.html, foundations.html

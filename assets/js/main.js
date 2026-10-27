@@ -7,6 +7,7 @@
   var doc = document.documentElement;
   var NS = "http://www.w3.org/2000/svg";
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var touch = window.matchMedia("(hover: none)").matches;
   var MAP = window.NA_MAP;
   var DEMOG = window.NA_DEMOG;
 
@@ -248,8 +249,9 @@
       var xy = P[p[0]];
       el("circle", { cx: xy[0], cy: xy[1], r: 15, fill: "rgba(168,75,10,0.16)" }, svg);
       el("circle", { cx: xy[0], cy: xy[1], r: 7, fill: "#a84b0a" }, svg);
-      txt(svg, xy[0] + p[2], xy[1] + p[3], p[1], { "text-anchor": p[4], "class": "port-label" });
+      txt(svg, xy[0] + p[2], xy[1] + p[3], p[1], { "text-anchor": p[4], "class": "port-label" + (/^(savannah|veracruz|houston)$/.test(p[0]) ? " port-minor" : "") });
     });
+    svg.classList.toggle("narrow", isNarrow(svg));
     buildRoute(svg);
     [["laredo", "Laredo", -16, 2, "end"], ["detroit", "Detroit", -14, -12, "end"]].forEach(function (p) {
       var xy = P[p[0]];
@@ -616,8 +618,8 @@
     }
     hit.addEventListener("mousemove", show);
     hit.addEventListener("click", show);
-    hit.addEventListener("mouseleave", function () { cross.setAttribute("opacity", 0); if (tip) tip.textContent = t("wal.hint"); });
-    if (tip) tip.textContent = t("wal.hint");
+    hit.addEventListener("mouseleave", function () { cross.setAttribute("opacity", 0); if (tip) tip.textContent = t(touch ? "wal.hintT" : "wal.hint"); });
+    if (tip) tip.textContent = t(touch ? "wal.hintT" : "wal.hint");
     if (svg.closest(".in")) drawPaths(svg);
   }
   function drawPaths(svg) {
@@ -718,7 +720,7 @@
   }
   function pyrSummary() {
     var d = DEMOG[pyrYear].NA;
-    return t("pyr.sum").replace("{y}", pyrYear).replace("{p}", Math.round(d.total / 1000)).replace("{m}", fmt(d.median, 1));
+    return t(touch ? "pyr.sumT" : "pyr.sum").replace("{y}", pyrYear).replace("{p}", Math.round(d.total / 1000)).replace("{m}", fmt(d.median, 1));
   }
   $$(".seg button").forEach(function (b) {
     b.addEventListener("click", function () {
@@ -734,6 +736,7 @@
   // together by supply-chain links, a pull back toward the eggs that snaps back, and one
   // perimeter. Everything is seeded, so a resize redraws the same picture.
   var egg = null;
+  var EGG_OVERLAY = "(max-width: 900px) and (min-height: 501px)"; // same query as the CSS
   var EGG_LAYERS = [
     { egg: 1, cloud: 0, link: 0, ghost: 0, map: 0 },
     { egg: 0, cloud: 1, link: 1, ghost: 0, map: 0 },
@@ -827,12 +830,15 @@
     if (!W || !H) return;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     e.cv.width = Math.round(W * dpr); e.cv.height = Math.round(H * dpr);
-    e.W = W; e.H = H; e.dpr = dpr; e.rd = W < 520 ? 1.7 : 2.2;
-    var Rw = Math.min(W / 6 * 0.84, H * 0.27);
-    e.eggs = [0, 1, 2].map(function (i) { return { x: W * (2 * i + 1) / 6, y: H * 0.5, r: Rw, ph: i * 1.9 + 0.4 }; });
-    e.cloud = { x: W / 2, y: H * 0.52, r: Math.min(W * 0.42, H * 0.42) };
-    var s = Math.min(W * 0.98 / e.vb[2], H * 0.94 / e.vb[3]);
-    e.map = { s: s, x: (W - e.vb[2] * s) / 2 - e.vb[0] * s, y: (H - e.vb[3] * s) / 2 - e.vb[1] * s };
+    e.W = W; e.H = H; e.dpr = dpr; e.rd = W < 520 ? 1.8 : 2.2;
+    // On phones the step cards slide over the lower part of the canvas, so draw in the top 56%.
+    var B = window.matchMedia(EGG_OVERLAY).matches ? H * 0.56 : H;
+    e.box = B;
+    var Rw = Math.min(W / 6 * 0.84, B * 0.27);
+    e.eggs = [0, 1, 2].map(function (i) { return { x: W * (2 * i + 1) / 6, y: B * 0.5, r: Rw, ph: i * 1.9 + 0.4 }; });
+    e.cloud = { x: W / 2, y: B * 0.52, r: Math.min(W * 0.42, B * 0.42) };
+    var s = Math.min(W * 0.98 / e.vb[2], B * 0.94 / e.vb[3]);
+    e.map = { s: s, x: (W - e.vb[2] * s) / 2 - e.vb[0] * s, y: (B - e.vb[3] * s) / 2 - e.vb[1] * s };
     e.parts.forEach(function (p) {
       var g = e.eggs[p.k], a = p.yb * Math.PI * 2, r = g.r * 0.5 * Math.sqrt(p.ya);
       p.p0x = g.x + g.r * 0.06 + Math.cos(a) * r; p.p0y = g.y - g.r * 0.06 + Math.sin(a) * r;
@@ -964,12 +970,12 @@
     // Country names under the eggs; under the ghosts they sit at the foot of the stage.
     var la = Math.max(L.egg, 0.8 * L.ghost);
     if (la > 0.01) {
-      ctx.font = "500 " + (W < 520 ? 11 : 12) + "px 'JetBrains Mono', ui-monospace, monospace";
+      ctx.font = "500 12px 'JetBrains Mono', ui-monospace, monospace";
       ctx.textAlign = "center";
       ctx.fillStyle = "rgba(236,232,223," + la.toFixed(3) + ")";
       [t("wa.CA"), t("map.us"), t("map.mx")].forEach(function (n, i) {
         var g = e.eggs[i];
-        ctx.fillText(n.toUpperCase(), g.x, L.ghost > L.egg ? H - 8 : g.y + g.r * 1.2 + 16);
+        ctx.fillText(n.toUpperCase(), g.x, L.ghost > L.egg ? e.box - 8 : g.y + g.r * 1.2 + 16);
       });
     }
   }
@@ -1010,7 +1016,7 @@
   // The step whose heading has crossed the trigger line drives the canvas.
   function trackEggSteps() {
     if (!eggSteps.length) return;
-    var line = window.innerHeight * (window.innerWidth <= 900 ? 0.8 : 0.62), active = 0;
+    var line = window.innerHeight * (window.matchMedia(EGG_OVERLAY).matches ? 0.8 : 0.62), active = 0;
     eggSteps.forEach(function (st, i) { if ($("h3", st).getBoundingClientRect().top < line) active = i; });
     eggSteps.forEach(function (st, i) { st.classList.toggle("is-active", i === active); });
     setEggState(+eggSteps[active].dataset.state);
@@ -1246,6 +1252,8 @@
   window.addEventListener("resize", function () {
     clearTimeout(resizeT);
     resizeT = setTimeout(function () {
+      var pm = $("#per-map");
+      if (pm) pm.classList.toggle("narrow", isNarrow(pm));
       [["#roo-chart", buildROO], ["#slope", buildSlope], ["#wa-line", buildWALine], ["#pyramid", buildPyramid]].forEach(function (c) {
         var svg = $(c[0]);
         if (svg && svg.classList.contains("narrow") !== isNarrow(svg)) c[1]();

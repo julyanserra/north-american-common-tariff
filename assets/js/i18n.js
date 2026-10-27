@@ -129,6 +129,8 @@ window.I18N = {
     "rt.s3.cu": "Drives straight through: no customs for goods inside the union.",
     "rt.s4.fta": "Arrives with every cost of the border in its price.",
     "rt.s4.cu": "Arrives sooner, without the costs of the border.",
+    "wal.hintT": "Tap the chart to compare years.",
+    "pyr.sumT": "{y}: {p} million people · median age {m}. Tap a row for details.",
     "share.copied": "Link copied"
   },
 
@@ -761,6 +763,8 @@ window.I18N = {
     "rm.stops": "Paradas en aduana",
     "rm.cert": "Certificados de origen",
     "rm.fees": "Honorarios de agencia en la frontera",
+    "wal.hintT": "Toca la gráfica para comparar años.",
+    "pyr.sumT": "{y}: {p} millones de personas · edad mediana {m}. Toca una fila para ver el detalle.",
     "f.back": "← Volver a la visión"
   }
 };
