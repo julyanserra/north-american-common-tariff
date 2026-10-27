@@ -90,6 +90,19 @@ Not reproduced, for lack of comparable recent data: U.S. content in Mexican expo
 | U.S. goods imports 2017 → 2024: China $505.6B → $438.9B; Mexico $314.0B → $505.9B; Canada $300.0B → $412.7B | U.S. Census Bureau (2017 annual data via BLS; Top Trading Partners, Dec. 2024) |
 | Shanghai–New York 40-ft container $10,166 (Oct. 22, 2026); composite index peak $10,375 (Sep. 2021) | Drewry World Container Index |
 
+## The scrambled egg theorem
+
+The theorem (once the three economies have lived under NAFTA's free trade, the eggs cannot be unscrambled, and the way forward is a customs union) is Jaime Serra Puche's. It is credited in the section's source note and on `foundations.html`; the narrative itself does not name him. The animation is illustrative: equal-size eggs, and dots and lines that do not stand for quantities.
+
+| Claim | Source |
+|---|---|
+| U.S. goods trade (exports + imports) with Canada and Mexico: $293.2B in 1993 (Mexico $81.5B, Canada $211.7B) | U.S. Census Bureau, Trade in Goods with Mexico (c2010) and Canada (c1220), annual totals |
+| Same, 2024: $1,600.0B (Mexico $837.6B, Canada $762.4B), 5.5 times 1993 | Same tables, current vintage (the Top Trading Partners release of Dec. 2024 shows Mexico at $839.9B) |
+| Some auto parts "cross the border seven or eight times as they are assembled into larger products, according to industry representatives"; some vehicle seats use components from four U.S. states and four Mexican locations | Congressional Research Service, *USMCA: Motor Vehicle Provisions and Issues*, IF11387, updated Oct. 13, 2021 |
+| 40¢ of U.S. content per $1 of Mexican exports to the U.S. | Koopman, Wang & Wei (2014), via [NS] |
+| 2017: the U.S. threatened to withdraw from NAFTA; USMCA signed Nov. 30, 2018, in force July 1, 2020 | Congressional Research Service, R48964 (2026), background on prior negotiations |
+| ≈80% of U.S. imports from Canada and Mexico claimed USMCA by July 2025, up from ≈50% (Mexico) and <40% (Canada) | Federal Reserve Bank of Dallas, Aug. 4, 2026 |
+
 ## Trade policy, 2024–2026
 
 | Claim | Source |
@@ -134,3 +147,4 @@ Viner (1950); Balassa (1961); Kemp & Wan (1976); Krueger (1993, 1997); Serra, No
 - Tariff table: confirm the Canadian truck rate (6.1%) and Mexico's 2026 rate for pickups (50%) against the official schedules.
 - 2025 stress test: Canada's pre-tariff USMCA share is "under 40%"; the chart plots it at 38%.
 - Logo license: keep the Noun Project credit above, or license the icon.
+- Scrambled egg theorem: add a published source (talk, interview or text, with date) for the attribution; no written source was found online.

@@ -157,7 +157,6 @@
   /* ───────────────────────── The union in one sentence: inline chips ───────────────────────── */
   // Square viewBoxes around each silhouette (the U.S. one frames the lower 48).
   var CHIP_VB = { CA: "277 -71 650 650", US: "311 284 520 520", MX: "361 547 350 350", NA: "60 -10 880 880" };
-  var MONARCH_D = $(".brand-mark path") ? $(".brand-mark path").getAttribute("d") : "";
   function pyramidIcon() {
     var rows = [10, 18, 25, 31, 35, 38], out = "";
     rows.forEach(function (w, i) {
@@ -173,7 +172,9 @@
   }
   var CHIP_ICON = {
     truck: '<svg viewBox="0 0 48 48" class="line"><path d="M4 30h28V14H4zM32 20h7l5 6v4H32z"/><circle cx="12" cy="34" r="4"/><circle cx="36" cy="34" r="4"/></svg>',
-    factory: '<svg viewBox="0 0 48 48" class="line"><path d="M6 40V21l9 6v-6l9 6v-6l9 6V8h8v32zM4 40h40"/></svg>'
+    factory: '<svg viewBox="0 0 48 48" class="line"><path d="M6 40V21l9 6v-6l9 6v-6l9 6V8h8v32zM4 40h40"/></svg>',
+    growth: '<svg viewBox="0 0 48 48" class="line"><path d="M6 37l11-11 8 7 15-16M31 17h9v9"/></svg>',
+    rook: '<svg viewBox="0 0 48 48"><path d="M13 42h22v-5H13zM17.5 35h13l-1.8-13h-9.4zM15 20h18V10h-4.4v4.4h-3.4V10h-2.4v4.4h-3.4V10H15z"/></svg>'
   };
   function buildChips() {
     var chips = $$(".chip[data-chip]");
@@ -186,7 +187,6 @@
         if (!MAP) return;
         c.innerHTML = '<svg viewBox="' + CHIP_VB[k] + '">' + (k === "NA" ? ["CA", "US", "MX"] : [k]).map(function (p) { return '<path d="' + MAP[p] + '"/>'; }).join("") + "</svg>";
       } else if (k === "pyramid") c.innerHTML = pyramidIcon();
-      else if (k === "monarch") c.innerHTML = '<svg viewBox="4 17.5 92 65"><path d="' + MONARCH_D + '"/></svg>';
       else c.innerHTML = CHIP_ICON[k] || "";
     });
   }
@@ -613,6 +613,293 @@
     setTimeout(function () { venn.classList.add("merged"); }, 1400);
   });
 
+  /* ───────────────────────── The scrambled egg theorem ───────────────────────── */
+  // One set of dots moves through four states: three eggs (1993), one scramble held
+  // together by supply-chain links, a pull back toward the eggs that snaps back, and one
+  // perimeter. Everything is seeded, so a resize redraws the same picture.
+  var egg = null;
+  var EGG_LAYERS = [
+    { egg: 1, cloud: 0, link: 0, ghost: 0, map: 0 },
+    { egg: 0, cloud: 1, link: 1, ghost: 0, map: 0 },
+    { egg: 0, cloud: 1, link: 1, ghost: 1, map: 0 },
+    { egg: 0, cloud: 0, link: 0.6, ghost: 0, map: 1 }
+  ];
+  var EGG_LOOP = 3600; // ms per pull-and-snap cycle
+  function seeded(seed) { return function () { seed = seed * 16807 % 2147483647; return (seed - 1) / 2147483646; }; }
+  function blobR(a, ph) { return 1 + 0.07 * Math.sin(3 * a + ph) + 0.045 * Math.sin(5 * a + 2 * ph) + 0.03 * Math.sin(8 * a + 3 * ph); }
+  // 0 at rest → pulled out → trembles → snaps back past the start and settles.
+  function pullShape(t) {
+    if (t < 0.12) return 0;
+    if (t < 0.5) return ease((t - 0.12) / 0.38);
+    if (t < 0.6) return 1 + 0.02 * Math.sin((t - 0.5) * 140);
+    var u = (t - 0.6) / 0.4;
+    return Math.exp(-5 * u) * Math.cos(10 * u);
+  }
+  // Orders points in horizontal bands, left to right, so two clouds can be paired by rank.
+  function bandOrder(xy) {
+    var idx = xy.map(function (_, i) { return i; }).sort(function (a, b) { return xy[a][1] - xy[b][1]; });
+    var nb = Math.max(1, Math.round(Math.sqrt(xy.length / 1.4))), out = [];
+    for (var b = 0; b < nb; b++) {
+      var band = idx.slice(Math.round(b * idx.length / nb), Math.round((b + 1) * idx.length / nb));
+      band.sort(function (a, c) { return xy[a][0] - xy[c][0]; });
+      out = out.concat(band);
+    }
+    return out;
+  }
+
+  function buildEgg() {
+    var cv = $("#egg-canvas");
+    if (!cv || !MAP || !cv.getContext || !window.Path2D) return;
+    var stage = cv.parentNode;
+    var N = stage.clientWidth < 520 ? 540 : 960;
+    var R = seeded(19941993);
+    var parts = [];
+    for (var i = 0; i < N; i++) {
+      var a = R() * Math.PI * 2, r = blobR(a, 0.7) * Math.sqrt(R());
+      parts.push({ k: i % 3, ya: R(), yb: R(), ux: Math.cos(a) * r, uy: Math.sin(a) * r, d: R() * 0.3, amp: 0.7 + R() * 0.14, sw: 0.6 + R() * 0.4, x: 0, y: 0, fx: 0, fy: 0 });
+    }
+    // Points on land, from a small raster of the three countries (map units).
+    var vb = MAP.viewBox.split(" ").map(Number), q = 0.5;
+    var probe = document.createElement("canvas");
+    probe.width = Math.ceil(vb[2] * q); probe.height = Math.ceil(vb[3] * q);
+    var pc = probe.getContext("2d");
+    pc.setTransform(q, 0, 0, q, -vb[0] * q, -vb[1] * q);
+    var land = ["CA", "US", "MX"].map(function (k) { return new Path2D(MAP[k]); });
+    land.forEach(function (l) { pc.fill(l); });
+    var px = pc.getImageData(0, 0, probe.width, probe.height).data, pts = [];
+    while (pts.length < N) {
+      var mx = R() * vb[2], my = R() * vb[3];
+      if (px[((my * q | 0) * probe.width + (mx * q | 0)) * 4 + 3] > 128) pts.push([vb[0] + mx, vb[1] + my]);
+    }
+    // Neighbours in the scramble stay neighbours on the map, so the links stay short.
+    var co = bandOrder(parts.map(function (p) { return [p.ux, p.uy]; })), mo = bandOrder(pts);
+    co.forEach(function (pi, j) { parts[pi].mx = pts[mo[j]][0]; parts[pi].my = pts[mo[j]][1]; });
+    // Supply chains: each dot is tied to its two nearest dots from the other countries.
+    var links = [], seen = {};
+    parts.forEach(function (p, i) {
+      var best = [[Infinity, -1], [Infinity, -1]];
+      parts.forEach(function (o, j) {
+        if (o.k === p.k) return;
+        var dd = (o.ux - p.ux) * (o.ux - p.ux) + (o.uy - p.uy) * (o.uy - p.uy);
+        if (dd < best[0][0]) { best[1] = best[0]; best[0] = [dd, j]; } else if (dd < best[1][0]) best[1] = [dd, j];
+      });
+      best.forEach(function (b) {
+        var key = Math.min(i, b[1]) + "-" + Math.max(i, b[1]);
+        if (b[1] < 0 || seen[key]) return;
+        seen[key] = 1; links.push([i, b[1], 1]);
+      });
+    });
+    egg = {
+      cv: cv, ctx: cv.getContext("2d"), stage: stage, parts: parts, links: links, vb: vb,
+      land: land, borders: new Path2D(MAP.borders),
+      state: 0, swirl: 0, t0: 0, dur: 0, raf: 0, visible: false,
+      from: Object.assign({}, EGG_LAYERS[0]), to: EGG_LAYERS[0]
+    };
+    layoutEgg();
+    if ("ResizeObserver" in window) new ResizeObserver(function () { layoutEgg(); drawEgg(performance.now()); }).observe(stage);
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (en) { egg.visible = en[0].isIntersecting; if (egg.visible) kickEgg(); }).observe(stage);
+    } else egg.visible = true;
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { drawEgg(performance.now()); });
+    drawEgg(performance.now());
+  }
+
+  function eggTarget(p, s) { return s === 0 ? [p.p0x, p.p0y] : s === 3 ? [p.p3x, p.p3y] : [p.p1x, p.p1y]; }
+
+  function layoutEgg() {
+    var e = egg, W = e.stage.clientWidth, H = e.stage.clientHeight;
+    if (!W || !H) return;
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    e.cv.width = Math.round(W * dpr); e.cv.height = Math.round(H * dpr);
+    e.W = W; e.H = H; e.dpr = dpr; e.rd = W < 520 ? 1.7 : 2.2;
+    var Rw = Math.min(W / 6 * 0.84, H * 0.27);
+    e.eggs = [0, 1, 2].map(function (i) { return { x: W * (2 * i + 1) / 6, y: H * 0.5, r: Rw, ph: i * 1.9 + 0.4 }; });
+    e.cloud = { x: W / 2, y: H * 0.52, r: Math.min(W * 0.42, H * 0.42) };
+    var s = Math.min(W * 0.98 / e.vb[2], H * 0.94 / e.vb[3]);
+    e.map = { s: s, x: (W - e.vb[2] * s) / 2 - e.vb[0] * s, y: (H - e.vb[3] * s) / 2 - e.vb[1] * s };
+    e.parts.forEach(function (p) {
+      var g = e.eggs[p.k], a = p.yb * Math.PI * 2, r = g.r * 0.5 * Math.sqrt(p.ya);
+      p.p0x = g.x + g.r * 0.06 + Math.cos(a) * r; p.p0y = g.y - g.r * 0.06 + Math.sin(a) * r;
+      p.p1x = e.cloud.x + p.ux * e.cloud.r; p.p1y = e.cloud.y + p.uy * e.cloud.r;
+      p.p3x = e.map.x + p.mx * s; p.p3y = e.map.y + p.my * s;
+      var t0 = eggTarget(p, e.state);
+      p.x = p.fx = t0[0]; p.y = p.fy = t0[1];
+    });
+    e.links.forEach(function (l) {
+      var a = e.parts[l[0]], b = e.parts[l[1]];
+      l[2] = Math.max(1, Math.hypot(a.p1x - b.p1x, a.p1y - b.p1y));
+    });
+    // Snap to the current state; a resize mid-transition just finishes it.
+    e.dur = 0; e.swirl = 0;
+  }
+
+  function eggBlob(ctx, g, scale) {
+    ctx.beginPath();
+    for (var i = 0; i <= 72; i++) {
+      var a = i / 72 * Math.PI * 2, r = g.r * scale * blobR(a, g.ph);
+      ctx[i ? "lineTo" : "moveTo"](g.x + Math.cos(a) * r, g.y + Math.sin(a) * r * 0.92);
+    }
+    ctx.closePath();
+  }
+
+  function drawEgg(now) {
+    var e = egg;
+    if (!e || !e.W) return;
+    var ctx = e.ctx, W = e.W, H = e.H, s = e.state;
+    ctx.setTransform(e.dpr, 0, 0, e.dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    var T = e.dur ? clamp((now - e.t0) / e.dur) : 1;
+    var LT = ease(clamp(T * 1.6)), L = {};
+    for (var key in e.to) L[key] = lerp(e.from[key], e.to[key], LT);
+
+    // Positions. The pull loop starts once the dots have reached the scramble.
+    var pull = 0;
+    if (s === 2) {
+      var tl = now - (e.t0 + e.dur);
+      pull = reduceMotion ? 1 : tl < 0 ? 0 : pullShape((tl % EGG_LOOP) / EGG_LOOP);
+    }
+    var cx = e.cloud.x, cy = e.cloud.y;
+    e.parts.forEach(function (p) {
+      var tg = eggTarget(p, s), k = ease(clamp((T - p.d) / 0.7));
+      var x = lerp(p.fx, tg[0], k), y = lerp(p.fy, tg[1], k);
+      if (e.swirl) {
+        var ang = e.swirl * p.sw * Math.sin(Math.PI * k), ca = Math.cos(ang), sa = Math.sin(ang);
+        var dx = x - cx, dy = y - cy;
+        x = cx + dx * ca - dy * sa; y = cy + dx * sa + dy * ca;
+      }
+      if (pull) { x += (p.p0x - p.p1x) * p.amp * pull; y += (p.p0y - p.p1y) * p.amp * pull; }
+      p.x = x; p.y = y;
+    });
+
+    // One perimeter: land, an orange outer edge, internal borders dashed.
+    if (L.map > 0.01) {
+      ctx.save();
+      ctx.setTransform(e.dpr * e.map.s, 0, 0, e.dpr * e.map.s, e.dpr * e.map.x, e.dpr * e.map.y);
+      ctx.globalAlpha = L.map;
+      ctx.fillStyle = "rgba(236,232,223,0.06)";
+      e.land.forEach(function (l) { ctx.fill(l); });
+      ctx.lineJoin = "round";
+      ctx.lineWidth = 2.2 / e.map.s; ctx.strokeStyle = C.NA;
+      e.land.forEach(function (l) { ctx.stroke(l); });
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.globalAlpha = 1; ctx.lineWidth = 5.4 / e.map.s;
+      ctx.stroke(e.borders);
+      ctx.globalCompositeOperation = "source-over";
+      ctx.globalAlpha = L.map;
+      ctx.setLineDash([4 / e.map.s, 5 / e.map.s]);
+      ctx.lineWidth = 1 / e.map.s; ctx.strokeStyle = "rgba(236,232,223,0.4)";
+      ctx.stroke(e.borders);
+      ctx.restore();
+    }
+    // A warm glow under the scramble.
+    if (L.cloud > 0.01) {
+      var gr = ctx.createRadialGradient(cx, cy, 0, cx, cy, e.cloud.r * 1.35);
+      gr.addColorStop(0, "rgba(240,138,36," + (0.11 * L.cloud).toFixed(3) + ")");
+      gr.addColorStop(1, "rgba(240,138,36,0)");
+      ctx.fillStyle = gr;
+      ctx.fillRect(0, 0, W, H);
+    }
+    // Egg whites and yolks; they swell and fade as the shells crack.
+    if (L.egg > 0.01) {
+      e.eggs.forEach(function (g, i) {
+        eggBlob(ctx, g, 1 + 0.18 * (1 - L.egg));
+        ctx.fillStyle = "rgba(236,232,223," + (0.92 * L.egg).toFixed(3) + ")";
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(g.x + g.r * 0.06, g.y - g.r * 0.06, g.r * 0.53, 0, Math.PI * 2);
+        ctx.fillStyle = C[["CA", "US", "MX"][i]];
+        ctx.globalAlpha = 0.45 * L.egg; ctx.fill(); ctx.globalAlpha = 1;
+      });
+    }
+    // Where the dots would have to go: the eggs they came from.
+    if (L.ghost > 0.01) {
+      ctx.save();
+      ctx.setLineDash([3, 5]); ctx.lineWidth = 1.2;
+      ctx.strokeStyle = "rgba(236,232,223," + (0.3 * L.ghost).toFixed(3) + ")";
+      e.eggs.forEach(function (g) { eggBlob(ctx, g, 1); ctx.stroke(); });
+      ctx.restore();
+    }
+    // Supply-chain links: stretched ones turn orange, then red.
+    if (L.link > 0.01) {
+      var cap = s === 3 ? Math.min(W, H) * 0.09 : Infinity, buckets = [[], [], []];
+      e.links.forEach(function (l) {
+        var a = e.parts[l[0]], b = e.parts[l[1]];
+        var len = Math.hypot(a.x - b.x, a.y - b.y);
+        if (len > cap) return;
+        var st = len / l[2];
+        buckets[s === 2 && st > 3.2 ? 2 : s === 2 && st > 1.7 ? 1 : 0].push(a, b);
+      });
+      [["rgba(236,232,223,0.17)", 0.8], ["rgba(240,138,36,0.3)", 0.7], ["rgba(229,72,77,0.22)", 0.6]].forEach(function (st, i) {
+        var seg = buckets[i];
+        if (!seg.length) return;
+        ctx.beginPath();
+        for (var j = 0; j < seg.length; j += 2) { ctx.moveTo(seg[j].x, seg[j].y); ctx.lineTo(seg[j + 1].x, seg[j + 1].y); }
+        ctx.strokeStyle = st[0]; ctx.lineWidth = st[1]; ctx.globalAlpha = L.link;
+        ctx.stroke(); ctx.globalAlpha = 1;
+      });
+    }
+    // The dots.
+    var rd = e.rd;
+    ["CA", "US", "MX"].forEach(function (c, k) {
+      ctx.beginPath();
+      e.parts.forEach(function (p) { if (p.k === k) { ctx.moveTo(p.x + rd, p.y); ctx.arc(p.x, p.y, rd, 0, Math.PI * 2); } });
+      ctx.fillStyle = C[c]; ctx.fill();
+    });
+    // Country names under the eggs; under the ghosts they sit at the foot of the stage.
+    var la = Math.max(L.egg, 0.8 * L.ghost);
+    if (la > 0.01) {
+      ctx.font = "500 " + (W < 520 ? 11 : 12) + "px 'JetBrains Mono', ui-monospace, monospace";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "rgba(236,232,223," + la.toFixed(3) + ")";
+      [t("wa.CA"), t("map.us"), t("map.mx")].forEach(function (n, i) {
+        var g = e.eggs[i];
+        ctx.fillText(n.toUpperCase(), g.x, L.ghost > L.egg ? H - 8 : g.y + g.r * 1.2 + 16);
+      });
+    }
+  }
+
+  function eggTick(now) {
+    egg.raf = 0;
+    drawEgg(now);
+    var busy = now < egg.t0 + egg.dur || (egg.state === 2 && !reduceMotion);
+    if (busy && egg.visible) egg.raf = requestAnimationFrame(eggTick);
+  }
+  function kickEgg() { if (egg && !egg.raf) egg.raf = requestAnimationFrame(eggTick); }
+
+  function setEggState(s) {
+    var e = egg;
+    if (!e || s === e.state) return;
+    var now = performance.now();
+    var LT = ease(clamp((e.dur ? clamp((now - e.t0) / e.dur) : 1) * 1.6));
+    for (var key in e.to) e.from[key] = lerp(e.from[key], e.to[key], LT);
+    e.parts.forEach(function (p) { p.fx = p.x; p.fy = p.y; });
+    e.swirl = e.state === 0 && s === 1 ? 2.4 : e.state === 1 && s === 0 ? -2.4 : 0;
+    e.state = s; e.to = EGG_LAYERS[s];
+    e.t0 = now; e.dur = reduceMotion ? 0 : e.swirl ? 2400 : 1500;
+    eggReadout(true);
+    kickEgg();
+    if (reduceMotion) drawEgg(now);
+  }
+
+  var eggSteps = $$(".egg-step");
+  function eggReadout(swap) {
+    var step = eggSteps.filter(function (st) { return +st.dataset.state === (egg ? egg.state : 0); })[0];
+    var box = $(".egg-readout");
+    if (!box || !step) return;
+    $("#egg-year").textContent = $(".step-k", step).textContent;
+    $("#egg-state").textContent = t("se.r" + (egg ? egg.state : 0));
+    if (swap) { box.classList.remove("swap"); box.getBoundingClientRect(); box.classList.add("swap"); }
+  }
+  langListeners.push(function () { eggReadout(false); if (egg) drawEgg(performance.now()); });
+  // The step whose heading has crossed the trigger line drives the canvas.
+  function trackEggSteps() {
+    if (!eggSteps.length) return;
+    var line = window.innerHeight * (window.innerWidth <= 900 ? 0.8 : 0.62), active = 0;
+    eggSteps.forEach(function (st, i) { if ($("h3", st).getBoundingClientRect().top < line) active = i; });
+    eggSteps.forEach(function (st, i) { st.classList.toggle("is-active", i === active); });
+    setEggState(+eggSteps[active].dataset.state);
+  }
+
   /* ───────────────────────── Footer easter egg ───────────────────────── */
   // Hover or focus reveals it; a tap toggles it on touch screens.
   $$(".egg").forEach(function (b) { b.addEventListener("click", function () { b.classList.toggle("on"); }); });
@@ -696,6 +983,7 @@
         var under = document.elementFromPoint(window.innerWidth / 2, nav.offsetHeight + 2);
         nav.classList.toggle("on-paper", !!(under && under.closest(".paper")));
       }
+      trackEggSteps();
     });
   }
   window.addEventListener("scroll", onScroll, { passive: true });
@@ -739,6 +1027,7 @@
   if (nav && nav.classList.contains("scrolled")) nav.dataset.always = "1";
   buildHeroMap();
   buildPerimeterMap();
+  buildEgg();
   var initial = new URLSearchParams(window.location.search).get("lang");
   if (!initial) {
     try { initial = localStorage.getItem("ona-lang"); } catch (e) { initial = null; }

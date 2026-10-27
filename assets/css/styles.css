@@ -603,8 +603,10 @@ section { position: relative; }
 .chip-na { background: var(--signal); }
 .chip-pyramid { background: #fbfaf6; box-shadow: 0 0 0 0.055em var(--paper), inset 0 0 0 1px var(--line-paper), 0 0.14em 0.32em rgba(20, 19, 17, 0.16); }
 .chip-pyramid svg { width: 76%; height: 76%; }
-.chip-monarch { background: var(--monarch-black); }
-.chip-monarch svg { width: 74%; fill: var(--signal); }
+.chip-growth { background: var(--ink); }
+.chip-growth svg.line { stroke: var(--signal); stroke-width: 3.4; }
+.chip-rook { background: var(--monarch-black); }
+.chip-rook svg { width: 70%; height: 70%; fill: var(--signal); }
 /* Chips pop in one after another as the sentence enters. */
 .statement-text .chip { transform: scale(0.3) rotate(-14deg); opacity: 0; transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s; }
 .statement-text.in .chip { transform: none; opacity: 1; }
@@ -726,6 +728,46 @@ section { position: relative; }
 #venn.merged .v-label, #venn.merged .v-q { opacity: 0; }
 #venn.merged .v-one, #venn.merged .v-a { opacity: 1; }
 @media (max-width: 900px) { .question { grid-template-columns: 1fr; } }
+
+/* The scrambled egg theorem: steps scroll past a sticky canvas */
+.egg-sec { border-top: 1px solid var(--line-ink); }
+.scrolly { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+.egg-fig { grid-column: 2; grid-row: 1; margin: 0; position: sticky; top: max(84px, calc(50vh - min(36vh, 330px) - 30px)); }
+.egg-readout { display: flex; align-items: baseline; gap: 14px; min-height: 1.6em; }
+.egg-year { color: var(--signal); font-size: 0.82rem; }
+.egg-state { font-family: var(--f-display); font-weight: 600; font-size: 1.08rem; letter-spacing: -0.01em; color: var(--on-ink); }
+.egg-readout.swap .egg-year, .egg-readout.swap .egg-state { animation: rise 0.5s var(--ease) both; }
+.egg-stage { position: relative; height: min(72vh, 660px); }
+#egg-canvas { display: block; width: 100%; height: 100%; }
+.egg-fig figcaption { margin-top: 8px; color: var(--on-ink-muted); font-size: 0.6rem; text-transform: none; letter-spacing: 0.02em; }
+.egg-steps { grid-column: 1; grid-row: 1; list-style: none; margin: 0; padding: 0; }
+.egg-step { min-height: 82vh; display: flex; flex-direction: column; justify-content: center; padding-left: 24px; border-left: 2px solid var(--line-ink); opacity: 0.32; transition: opacity 0.5s var(--ease), border-color 0.5s; }
+.egg-step:first-child { min-height: 64vh; justify-content: flex-start; padding-top: 12vh; }
+.egg-step.is-active { opacity: 1; border-left-color: var(--signal); }
+.egg-step .step-k { color: var(--signal); }
+.egg-step h3 { font-family: var(--f-display); font-size: clamp(1.9rem, 3.4vw, 2.8rem); letter-spacing: -0.025em; line-height: 1.02; margin: 10px 0 14px; }
+.egg-step p:not(.step-k):not(.egg-stat) { color: var(--on-ink-muted); max-width: 470px; }
+.egg-stat { margin-top: 22px; display: grid; gap: 6px; max-width: 420px; }
+.egg-stat b { font-family: var(--f-display); font-weight: 700; font-size: clamp(2.3rem, 4vw, 3.2rem); letter-spacing: -0.03em; line-height: 1; color: var(--signal); }
+.egg-stat span { color: var(--on-ink-muted); font-size: 0.92rem; }
+.theorem { margin-top: clamp(48px, 7vw, 88px); display: grid; grid-template-columns: 1fr 1fr; border-top: 2px solid var(--on-ink); }
+.theorem > div { padding: 26px 32px 0 0; }
+.theorem > div + div { padding-left: 32px; border-left: 1px solid var(--line-ink); }
+.th-k { color: var(--signal); }
+.th-s { margin-top: 12px; font-family: var(--f-display); font-weight: 600; font-size: clamp(1.3rem, 2.3vw, 1.8rem); line-height: 1.2; letter-spacing: -0.018em; text-wrap: pretty; }
+.theorem > div + div .th-s::after { content: " \220E"; color: var(--signal); }
+.egg-sec .chart-note { margin-top: 28px; max-width: 900px; }
+@media (max-width: 900px) {
+  .scrolly { grid-template-columns: 1fr; gap: 0; }
+  /* The canvas sticks under the nav; the steps scroll up beneath it. */
+  .egg-fig { grid-column: 1; grid-row: 1; top: 60px; z-index: 3; background: var(--ink); padding: 10px 0 8px; margin: 0 calc(var(--gutter) * -1); padding-left: var(--gutter); padding-right: var(--gutter); border-bottom: 1px solid var(--line-ink); }
+  .egg-stage { height: min(40vh, 360px); }
+  .egg-state { font-size: 0.95rem; }
+  .egg-steps { grid-row: 2; }
+  .egg-step, .egg-step:first-child { min-height: 78vh; justify-content: flex-start; padding: 7vh 0 0 18px; }
+  .theorem { grid-template-columns: 1fr; }
+  .theorem > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line-ink); margin-top: 26px; }
+}
 
 .found { overflow: hidden; }
 .found .wrap { position: relative; }
