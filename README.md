@@ -1,54 +1,60 @@
 # One North America
 
-A bilingual (English / Spanish) website making the case for a **North American common external tariff**, the step that would turn the USMCA free trade area into a customs union.
+A bilingual (English / Spanish) website showing **what a united North America would look like**: Canada, Mexico and the United States as a customs union, with one common tariff at the outer edge, free circulation of goods inside, and one voice in the world.
 
-The content is based on *A Case for a North American Common Tariff* by Pedro Noyola and Jaime Serra (Wilson Center, Mexico Institute, 2025) and related writing by the authors. Every figure on the site is attributed; see [`SOURCES.md`](SOURCES.md) for a claim-by-claim source sheet.
+The vision is based on the proposal of Jaime Serra Puche and Pedro Noyola, *A Case for a North American Common Tariff* (Wilson Center, 2025). The academic and data foundations live on a second page.
 
-## What's on the page
+## Pages
 
-| Section | Purpose |
+**`index.html` — the vision**
+
+| Section | What it shows |
 |---|---|
-| Hero | Scroll-driven illustration: three tariff schedules converge into one |
-| Thesis | The proposal in the authors' words |
-| 01 · Stakes | Key figures and a U.S. trade-by-partner chart |
-| 02 · Why | How a free trade area creates rules of origin and border friction; the 2025 paradox |
-| 03 · Follow a part | Interactive toggle: a component's journey under today's FTA vs. a customs union |
-| 04 · Proposal | Nine design principles from the paper |
-| 05 · Ladder | The continuum of integration, and what is *not* proposed |
-| 06 · Vision | What a united North America makes possible |
-| 07 · Precedents | Customs unions that already work |
-| 08 · Timeline | 1965 → 2036, plus the paper's five-stage implementation plan |
-| 09 · FAQ | Hard questions, straight answers |
-| 10 · Authors / Read | Bios, original sources, share |
+| Hero | Map of the three countries; on scroll the internal borders fade and a single perimeter remains |
+| 01 The union at a glance | Five changes (common tariff, free circulation, shared rules, shared revenue, one voice) and what stays national |
+| 02 The common tariff | A sample common tariff schedule: today's rates in CA / US / MX and where the common rate lands, with the rules that set it |
+| 03 One perimeter | Ports of entry vs internal crossings, plus a "today vs in the union" journey of one part |
+| 04 Demographic advantage | Combined population pyramid (2025 / 2050) and working-age change vs EU, China, Japan, India |
+| 05 Built in North America | Nearshoring, shared production, energy, each country's role |
+| 06 Neighbors already | Shared faith, languages and families; managed circular mobility |
+| 07 One voice in the world | North America vs EU vs China |
+| 08 How we get there | The five implementation stages and the timeline |
+| 09 Questions | Straight answers to hard questions |
+| 10 Built on research | Link to the foundations page |
+
+**`foundations.html` — the evidence**: the proposal in the authors' words, a lineage of proposals (Viner 1950 → CFR 2005 → Noyola & Serra 2025), the evidence behind every claim, data and methods, and a full bibliography.
 
 ## Tech
 
-Plain HTML, CSS and vanilla JavaScript. No build step and no dependencies (fonts load from Google Fonts).
+Plain HTML, CSS and vanilla JavaScript. No build step. Fonts: Archivo, Public Sans, IBM Plex Mono (Google Fonts).
 
 ```
-index.html            # all English content (source of truth)
+index.html, foundations.html
 assets/css/styles.css
-assets/js/i18n.js     # Spanish translations, keyed by data-i18n
-assets/js/main.js     # hero animation, reveals, toggle, chart, language switch
+assets/js/data.js     # generated: map geometry + UN population data (see tools/)
+assets/js/i18n.js     # Spanish translations (English lives in the HTML)
+assets/js/main.js     # map animation, tariff schedule, charts, toggles, language switch
 assets/img/           # favicon, social share image
+tools/                # scripts that regenerate data.js
+SOURCES.md            # every figure and its source
 ```
 
 ### Run locally
 
 ```bash
 python3 -m http.server 8000
-# open http://localhost:8000  (add ?lang=es for Spanish)
+# http://localhost:8000          (add ?lang=es for Spanish)
 ```
 
-### Editing copy
+### Editing
 
-- **English:** edit `index.html` directly.
-- **Spanish:** every translatable element has a `data-i18n="key"` attribute; edit the matching key in `assets/js/i18n.js`. Values may contain inline HTML (`<em>`, `<strong>`).
-- Language is picked from `?lang=`, then the visitor's saved choice, then the browser language.
+- **English copy:** edit the HTML directly.
+- **Spanish copy:** each translatable element has `data-i18n="key"`; edit that key in `assets/js/i18n.js`.
+- **Tariff schedule rows:** `SCHEDULE` in `assets/js/main.js` (names and rule text are i18n keys `sch.p.*`, `sch.rule.*`).
 
 ### Deploy
 
-- **GitHub Pages:** in the repo's *Settings → Pages*, set *Source* to **GitHub Actions**. `.github/workflows/pages.yml` deploys on every push to `main`.
-- **Vercel / Netlify / any static host:** point it at the repo root; no build command.
+- **GitHub Pages:** *Settings → Pages → Source: GitHub Actions*. `.github/workflows/pages.yml` deploys every push to `main`.
+- **Vercel / Netlify / any static host:** serve the repo root; no build command.
 
-When a custom domain is set, change `og:image` in `index.html` to an absolute URL so link previews work everywhere.
+Once a domain is set, make `og:image` an absolute URL so link previews work everywhere.

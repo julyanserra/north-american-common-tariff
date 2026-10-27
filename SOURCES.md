@@ -1,58 +1,98 @@
 # Sources and fact sheet
 
-Every factual claim on the site, where it comes from, and where it appears. Primary source unless noted:
+Every figure on the site and where it comes from. The same material is presented for readers on `foundations.html`.
 
-> **[NS]** Pedro Noyola and Jaime Serra, *A Case for a North American Common Tariff*, Wilson Center, Mexico Institute, March 2025. <https://www.wilsoncenter.org/article/case-north-american-common-tariff>
+**[NS]** Pedro Noyola and Jaime Serra, *A Case for a North American Common Tariff*, Wilson Center, Mexico Institute, March 2025.
 
-## From the paper [NS]
+## The proposal [NS]
 
-| Claim on site | Paper section |
+| Claim | Section |
 |---|---|
-| "We propose that North America adopt a common tariff as an anchor for the natural evolution of the free trade area to a customs union." (verbatim) | Introduction |
-| The common tariff would implement the "tariff unification" actions proposed by the Mexican government since 2024 | Introduction |
-| Feb. 1, 2025: U.S. announces tariffs of up to 25% on Mexico and Canada and 10% on China; a Chinese good re-exported via Mexico would pay 10% vs. 25% for a USMCA-compliant Mexican good | Introduction |
-| Three rules for trade creation: GATT Art. XXIV, non-discriminatory treatment of extra-regional investment, effective dispute resolution | I |
-| Intraregional trade grew 6%/yr on average since 1994; investment 8%/yr; extra-regional trade also grew | I |
-| By 2012, each dollar of Mexican exports to the U.S. contained 40 cents of U.S. exports to Mexico (Koopman et al., NBER 2012) | I |
-| Mexico's average tariff at NAFTA ~9%, more than 3× the U.S. average; reduced to under 5% | I |
-| A common tariff 35 years ago would have disrupted Mexican production chains | I |
-| 2023: 2,278 subheadings (40.6%) with identical minimum MFN tariffs in U.S. and Mexico, covering 60.9% of U.S. imports and 65.5% of Mexico's | I (table) |
-| USMCA auto rule of origin ~20% more restrictive than NAFTA's | II |
-| Rules of origin "threaten to become a protectionist vortex, a permanent source of trade diversion and net social loss" (verbatim) | II |
-| Mexican customs agency at the U.S. border costs 1–3% of invoice value; dual storage; costs passed to delivered prices | II |
-| USMCA's 2026 extension clause ("poison pill"); "an opportunity to progress to a better model was lost" | II, Intro |
-| U.S. tariff increases in 2018 and Mexico's responses distorted effective protection | III |
-| Extending the USMCA as is would entrench distortions; contradiction between restrictive rules of origin and competitiveness; compete with China, India and the EU | IV |
-| A common tariff eliminates origin certification and customs operations for intraregional trade; scale effects; complementarity (Mexico/SE Asia, U.S./Europe & NE Asia, Canada/energy) | IV |
-| Optimal tariff; machinery & equipment (~$500B/yr) and vehicles (~$400B/yr) imports are 30–50% of suppliers' exports | IV · Common Tariff |
-| Agriculture unified; quotas aggregated and auctioned region-wide | IV · Common Tariff |
-| Use gaps between MFN and bound WTO rates so the union is more open "on the whole"; start with identical regimes + transitional schedule | IV · Common Tariff |
-| Revenue formula: arrival criterion + trade-creation criterion; EU and SACU precedents | IV · Tariff Revenues |
-| Mexico's bound rates exceed applied MFN; gap smaller in U.S./Canada; "spaghetti bowl"; grandfathering vs. phase-outs | IV · Extraregional |
-| Common contingent protection and competition policy via mirror national systems, no supranational bodies; Mexico bifurcates its system; USMCA Arts. 316/317 | IV · Contingent Protection |
-| Eliminate Mexico's preferential exporter regime with transition; infrastructure, education, security, energy | IV · Backward Linkage |
-| Five implementation stages; negotiators become "implementers" | IV · Implementation |
-| Circular-mobility and security agreements as complements; "most productive region of the world" (verbatim) | V |
-| Integration continuum: sectoral (ALADI) → FTA (North America) → customs union (Southern Africa) → common market (Southern Cone) → economic union (Europe); Auto Pact | Endnote 9, IV |
-| Authors' 1997 report on regional trade agreements; Noyola & González, *Modernidad y economía* (1999) | Endnotes 1, 2, 16 |
+| Common tariff "as an anchor for the natural evolution of the free trade area to a customs union" (verbatim) | Introduction |
+| Implements the "tariff unification" actions proposed by the Mexican government since 2024 | Introduction |
+| Common tariff eliminates origin certification and customs operations for intraregional trade | IV |
+| 2,278 subheadings (40.6%) with identical minimum MFN tariffs in U.S. and Mexico, 60.9% of U.S. imports, 65.5% of Mexico's (2023) | I (table) |
+| Use MFN–bound gaps; "on the whole" more open (GATT XXIV); start with identical lines, then a transitional schedule | IV |
+| Optimal tariffs: machinery & equipment ≈$500B/yr and vehicles ≈$400B/yr of imports, 30–50% of suppliers' exports | IV |
+| Agriculture unified; quotas aggregated and auctioned | IV |
+| Revenue: arrival criterion + trade-creation criterion; EU and SACU precedents | IV |
+| Mirror national systems, no supranational bodies; Mexico separates dumping and injury findings | IV |
+| Phase out Mexico's preferential exporter regime with a transition | IV |
+| Five implementation stages; negotiators become "implementers" | IV |
+| Complementarity: Mexico ← Southeast Asia goods; U.S. ← capital-intensive goods from Europe/NE Asia; Canada ← energy demand | IV |
+| Compete with China, India and the EU | IV |
+| Circular-mobility agreement; security agreements (fentanyl in NW Mexico, trafficking in S Mexico) | V |
+| "Most productive region of the world" (verbatim) | V |
+| Rules of origin "protectionist vortex" (verbatim); USMCA auto rule ≈20% more restrictive than NAFTA | II |
+| Customs agency cost 1–3% of invoice value; dual warehousing; reloading | II |
+| 40¢ of U.S. content per $1 of Mexican exports to the U.S. (2012, Koopman et al.) | I |
+| Mexico's average tariff ≈9% at NAFTA's start, later below 5% | I |
 
-## Other sources
+## Common tariff table
+
+| Product | CA | US | MX | Source |
+|---|---|---|---|---|
+| Laptops/computers (8471.30) | 0% | 0% | 0% | ITA; national tariffs |
+| Smartphones (8517.13) | 0% | 0% | 0% | ITA; national tariffs |
+| Cotton T-shirts (6109.10) | 18% | 16.5% | 35% | Canada Customs Tariff; U.S. HTS; Mexico decree Dec. 2024 / LIGIE reform 2026 |
+| Passenger cars (8703) | 6.1% | 2.5% | 50% | Canada MFN; U.S. HTS; Mexico LIGIE reform (DOF Dec. 29, 2025, in force Jan. 1, 2026) |
+| Pickup trucks (8704) | 6.1% | 25% | 50% | Canada MFN; U.S. HTS ("chicken tax"); Mexico LIGIE reform 2026 |
+| Simple average MFN | 3.8% | 3.4% | 11.1% | WTO Tariff & Trade Data (CA, US 2025; MX 2026) |
+
+Excludes temporary additional duties imposed since 2025. Common rates are illustrative, set by: (A) identical lines lock in; (B) converge to the lowest rate consistent with WTO commitments (CFR 2005 task force); (C) calibrated where regional buying power matters [NS]; (D) agricultural quotas pooled [NS]. NAFTA Annex 308.1/308.2 aligned MFN rates on computers and color TV tubes.
+
+**To expand to all product groups:** add the WTO tariff profiles (Part A.2) for Canada, the U.S. and Mexico and extend `SCHEDULE` in `assets/js/main.js`.
+
+## Demography
+
+UN World Population Prospects 2024, medium variant, via the `wpp2024` data package; computed with `tools/build-demography.py`.
+
+| | Median age 2025 | Working age 15–64, change 2025→2050 |
+|---|---|---|
+| Mexico | 30.8 | +9.2% |
+| United States | 39.6 | +3.6% |
+| Canada | 41.7 | +6.7% |
+| **North America** | **37.3** | **+5.3%** (≈ +18M) |
+| European Union (27) | 45.5 | −17.0% |
+| China | 41.4 | −25.3% |
+| Japan | — | −25.6% |
+| India | — | +12.5% |
+
+Population 2025: North America 521M; EU 448M; China 1,414M.
+
+## Trade, energy, economy
 
 | Claim | Source |
 |---|---|
-| U.S. goods trade 2024: Mexico $839.9B, Canada ≈$762B, China ≈$582B | U.S. Census Bureau, Top Trading Partners, Dec. 2024 — <https://www.census.gov/foreign-trade/statistics/highlights/top/top2412yr.html> |
-| Nearly $2T in goods and services trade within the USMCA region | USTR |
-| USMCA auto regional value content: 75% (USMCA) vs 62.5% (NAFTA) | USMCA Ch. 4 Appendix; NAFTA Art. 403 |
-| July 1, 2026 joint review: U.S. declines to extend; annual reviews; expiry July 1, 2036 absent extension | White & Case, Greenberg Traurig, DLA Piper client alerts (July 2026) |
-| Common tariffs already operate in televisions and sugar (Serra Puche) | Opportimes, "Customs Union between Mexico and the United States: Ebrard's discarded proposal" |
-| Ebrard: a customs union is "not in the spirit of the United States" | Same as above |
-| Nexos essay, *Hacia un arancel común en América del Norte* | <https://sai.com.mx/2025/02/hacia-un-arancel-comun-en-america-del-norte-blog-de-la-redaccion-de-la-revista-nexos/> |
-| Guillermo Ortiz, *The Case for a North American Customs Union* (Project Syndicate, May 2025) | <https://www.stabroeknews.com/2025/05/21/features/project-syndicate/the-case-for-a-north-american-customs-union/> |
-| Customs-union precedents: SACU (1910), EU customs union (1968), Mercosur CET (1995), EU–Türkiye (1995) | Standard references (WTO, European Commission) |
-| North America ≈30% of world GDP (Vision / FAQ copy) | IMF World Economic Outlook, nominal GDP, approx. |
-| Jaime Serra Puche bio (Yale PhD; SECOFI 1988–94; Finance 1994; SAI Law & Economics) | SAI Law & Economics; Wikipedia |
+| U.S. goods trade 2024: Mexico $839.9B, Canada ≈$762B, China ≈$582B | U.S. Census Bureau, Top Trading Partners, Dec. 2024 |
+| 2023: Mexico overtook China as top source of U.S. imports ($475B vs $427B) | U.S. Commerce Department (via PBS/AP, Feb. 2024) |
+| Canada supplied 60% of U.S. crude oil imports (2023) | U.S. EIA |
+| U.S. pipeline gas exports to Mexico averaged a record 6.4 Bcf/d (2024) | U.S. EIA |
+| GDP 2024 ≈ $33T North America (≈30% of world), ≈$19T EU, ≈$19T China | IMF / national accounts, rounded |
+
+## People and culture
+
+| Claim | Source |
+|---|---|
+| Mexico: 77.7% Catholic, 11.2% Protestant/evangelical (≈89% Christian) | INEGI, 2020 census |
+| U.S.: 62% Christian | Pew Research Center, Religious Landscape Study 2023–24 (pub. 2025) |
+| Canada: 53.3% Christian | Statistics Canada, 2021 census |
+| 43.4M people in the U.S. speak Spanish at home | American Community Survey 2023 |
+| 37.2M Americans of Mexican origin | Pew Research Center (2021 ACS) |
+| ≈800,000 U.S.-born residents in Mexico, its largest foreign-born group | INEGI, 2020 census |
+| Linguistic proximity raises migration (30 OECD destinations, 1980–2010) | Adserà & Pytliková, Economic Journal 2015 |
+| Cultural barriers explain migration among developed countries | Belot & Ederveen, Journal of Population Economics 2012 |
+
+## Lineage and theory
+
+Viner (1950); Balassa (1961); Kemp & Wan (1976); Krueger (1993, 1997); Serra, Noyola et al. (1997); Pastor (2001); Dobson (2002); Council on Foreign Relations Task Force (2005: "boundaries … defined by a common external tariff and an outer security perimeter"; CET negotiated sector by sector "at the lowest rate consistent with multilateral obligations"); Anson et al. (2005); Carrère & de Melo (2006); Broda, Limão & Weinstein (2008); Koopman, Wang & Wei (2014); Levy & López-Calva (2023). Full citations on `foundations.html`.
+
+## Policy context
+
+- July 1, 2026 USMCA joint review: the U.S. declined to extend; annual reviews follow; expiry July 1, 2036 absent extension (White & Case, Greenberg Traurig, DLA Piper alerts).
+- Mexico's Economy Secretary has said a customs union is "not in the spirit of the United States" (Opportimes).
 
 ## To review before launch
 
-- Author bios: confirm wording and add photos if desired (currently monogram placeholders).
-- The illustration in the hero is explicitly labeled illustrative; bar heights are not real tariff data.
+- Author bios (foundations page): confirm wording; add photos if desired.
+- Tariff table: confirm the Canadian truck rate (6.1%) and Mexico's 2026 rate for pickups (50%) against the official schedules.
