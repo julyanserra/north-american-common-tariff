@@ -156,7 +156,7 @@ window.I18N = {
     "hero.l1": "Tres países.",
     "hero.l2a": "Tres aranceles.",
     "hero.l2b": "Un mercado.",
-    "hero.sub": "Imagina a América del Norte como una unión aduanera: un arancel común en su perímetro, bienes que circulan libremente en su interior y una sola política comercial frente al resto del mundo. Cada nación conserva su gobierno, su moneda, sus leyes y sus fronteras para las personas.",
+    "hero.sub": "Una unión aduanera para América del Norte: un solo arancel en el perímetro y bienes que circulan libremente adentro. Todo lo demás sigue siendo nacional.",
     "hero.f1": "millones de personas",
     "hero.f2": "billones de PIB",
     "hero.f3": "de la producción mundial",
