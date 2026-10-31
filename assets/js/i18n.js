@@ -474,7 +474,7 @@ window.I18N = {
     "evl.path": "La evidencia: instituciones sin supranacionalidad",
     "evl.faq": "Las objeciones más difíciles y lo que responde la propuesta",
 
-    "foot.note": "Una iniciativa independiente por una unión aduanera de América del Norte. Basada en Noyola y Serra, <cite>A Case for a North American Common Tariff</cite> (Wilson Center, 2025). Las cifras citan su fuente; los elementos ilustrativos están señalados.",
+    "foot.note": "Una propuesta para una unión aduanera de América del Norte, basada en Noyola y Serra, <cite>A Case for a North American Common Tariff</cite> (Wilson Center, 2025). Las cifras citan su fuente; los elementos ilustrativos están señalados.",
 
     "f.nav.proposal": "La propuesta",
     "f.nav.lineage": "Antecedentes",
@@ -765,6 +765,7 @@ window.I18N = {
     "rm.fees": "Honorarios de agencia en la frontera",
     "wal.hintT": "Toca la gráfica para comparar años.",
     "pyr.sumT": "{y}: {p} millones de personas · edad mediana {m}. Toca una fila para ver el detalle.",
+    "sai.by": "Presentado por",
     "f.back": "← Volver a la visión"
   }
 };

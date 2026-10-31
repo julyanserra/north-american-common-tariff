@@ -611,9 +611,36 @@ section { position: relative; }
 .site-foot { background: var(--ink); color: var(--on-ink-muted); padding: 48px 0 56px; border-top: 1px solid var(--line-ink); }
 .foot-grid { display: grid; grid-template-columns: auto 1fr; gap: 16px 40px; align-items: center; }
 .site-foot .brand { color: var(--on-ink); }
-.foot-tri { justify-self: end; font-size: 0.62rem; }
+.foot-tri { grid-column: 1 / -1; font-size: 0.62rem; }
+.foot-tri span { white-space: nowrap; }
 .foot-note { grid-column: 1 / -1; max-width: 760px; font-size: 0.9rem; }
-@media (max-width: 640px) { .foot-grid { grid-template-columns: 1fr; } .foot-tri { justify-self: start; } }
+@media (max-width: 640px) { .foot-grid { grid-template-columns: 1fr; } }
+
+/* SAI Derecho & Economía: a quiet signature. The letters take the text color; the arc under
+   "SAI" is drawn in the monarch orange, like the perimeter line, and warms on hover. */
+.sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+.sai-arc { fill: var(--sai-arc, currentColor); transition: fill 0.3s; }
+.sai-mark { display: block; flex: none; width: 64px; height: auto; aspect-ratio: 74 / 47; --sai-arc: rgba(240, 138, 36, 0.8); transition: color 0.3s; }
+.foot-sai, .hero-by { color: var(--on-ink-muted); text-decoration: none; transition: color 0.3s; }
+.foot-sai:hover, .hero-by:hover, .foot-sai:focus-visible, .hero-by:focus-visible { color: var(--on-ink); }
+.foot-sai:hover .sai-mark, .hero-by:hover .sai-mark { --sai-arc: var(--signal); }
+.foot-sai { justify-self: end; display: inline-flex; align-items: center; gap: 14px; }
+.foot-sai .mono { font-size: 0.6rem; text-transform: none; letter-spacing: 0.04em; }
+.foot-sai .sai-mark { width: 82px; }
+/* Phones: name, note, then the SAI line as its own ruled row, then the three names. */
+@media (max-width: 640px) {
+  .foot-grid { gap: 20px; }
+  .site-foot .brand { order: 1; }
+  .foot-note { order: 2; }
+  .foot-sai { order: 3; justify-self: stretch; justify-content: space-between; padding: 16px 0; border-top: 1px solid var(--line-ink); border-bottom: 1px solid var(--line-ink); }
+  .foot-sai .sai-mark { width: 74px; }
+  .foot-tri { order: 4; line-height: 1.9; }
+  .foot-egg { order: 5; min-height: 0; }
+}
+.hero-by { display: inline-flex; align-items: center; gap: 12px; margin-top: 30px; animation: rise 0.9s 0.52s var(--ease) both; }
+.hero-by .mono { font-size: 0.6rem; text-transform: none; letter-spacing: 0.04em; }
+.hero-by .sai-mark { width: 52px; }
+@media (max-width: 920px) { .hero-by { display: none; } }
 
 /* ==========================================================================
    Foundations page
@@ -1031,7 +1058,7 @@ figure:target { animation: arrive-box 1.8s var(--ease) 0.4s; }
   .mono { font-size: 0.78rem; }
   .chart-note, .src, .chart figcaption p, .hero-map figcaption, .schedule-legend, .tb-sub, .tb-head, .tb-prod span,
   .per-legend, .rt-status b, .meter-label, .step .mono, .pyr-legend, .ages .label, .egg-fig figcaption, .ev-doors figcaption p,
-  .statement-hint, .kinds, .fs-count, .theme-back, .chain-go .mono, .oq-k, .foot-tri, .egg-note, .share-status, .tag,
+  .statement-hint, .kinds, .fs-count, .theme-back, .chain-go .mono, .oq-k, .foot-tri, .egg-note, .share-status, .tag, .foot-sai .mono,
   .f-contents span, .fs-sec a, .fs-table th, .scroll-cue { font-size: 0.7rem; }
   .route-meter dt { font-size: 0.64rem; }
   .ev-link { font-size: 0.8rem; }

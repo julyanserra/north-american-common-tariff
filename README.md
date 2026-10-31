@@ -46,6 +46,8 @@ Plain HTML, CSS and vanilla JavaScript. No build step. Fonts: Space Grotesk, Int
 
 The logo is a monarch butterfly, the one traveler that already crosses all three countries every year. Hovering the footer logo reveals a short note.
 
+**SAI Derecho & Economía.** A quiet "Presented by" signature with the SAI mark sits under the hero buttons (desktop and tablet) and in both footers. The mark is inlined once per page as a hidden sprite (source: `assets/img/sai.svg`) and drawn with `<use href="#sai">`: its letters take the text color and its arc is drawn in the monarch orange, warming on hover.
+
 **Phones.** The section links and the language switch live in the menu; wide charts switch to a narrow layout with larger type; no text is set below about 11px; touch screens get "tap" instead of "hover" hints. In the scrambled egg section, upright phones get a full-screen canvas that draws in its upper part while each step arrives as a card sliding over it (phones held sideways keep the side-by-side layout; the query lives in both `styles.css` and `EGG_OVERLAY` in `main.js`). On the perimeter map the toggle sits above the map and minor port labels are hidden.
 
 ```
