@@ -640,7 +640,18 @@ section { position: relative; }
 .hero-by { display: inline-flex; align-items: center; gap: 12px; margin-top: 30px; animation: rise 0.9s 0.52s var(--ease) both; }
 .hero-by .mono { font-size: 0.6rem; text-transform: none; letter-spacing: 0.04em; }
 .hero-by .sai-mark { width: 52px; }
-@media (max-width: 920px) { .hero-by { display: none; } }
+@media (max-width: 920px) { .hero-by { margin-top: 16px; gap: 10px; } .hero-by .sai-mark { width: 44px; } }
+/* Foundations: the SAI mark as a masthead, opposite the kicker; inline on phones. */
+.f-hero .wrap { position: relative; }
+.f-by { position: absolute; top: 0; right: var(--gutter); display: flex; flex-direction: column; align-items: flex-end; gap: 10px; color: var(--on-ink-muted); text-decoration: none; transition: color 0.3s; animation: fade 1.2s 0.3s both; }
+.f-by .mono { font-size: 0.62rem; text-transform: none; letter-spacing: 0.04em; }
+.f-by .sai-mark { width: 104px; }
+.f-by:hover, .f-by:focus-visible { color: var(--on-ink); }
+.f-by:hover .sai-mark { --sai-arc: var(--signal); }
+@media (max-width: 760px) {
+  .f-by { position: static; flex-direction: row; align-items: center; gap: 12px; margin-bottom: 28px; }
+  .f-by .sai-mark { width: 64px; }
+}
 
 /* ==========================================================================
    Foundations page
