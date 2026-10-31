@@ -223,8 +223,9 @@ section { position: relative; }
   .hero-facts { margin-top: 14px; }
   .hero-cta { display: none; }
   .scroll-cue { display: none; }
-  .hero-map { align-self: stretch; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
-  #hero-map { max-height: 100%; height: 100%; }
+  /* The map takes whatever height is left after its caption and the SAI line, so nothing overlaps or is cut off. */
+  .hero-map { align-self: stretch; display: flex; flex-direction: column; min-height: 0; }
+  #hero-map { flex: 1 1 0; min-height: 0; height: auto; max-height: none; }
 }
 @media (max-width: 920px) and (max-height: 760px) { .hero-sub { display: none; } }
 @media (max-width: 920px) and (min-height: 761px) {
@@ -640,7 +641,13 @@ section { position: relative; }
 .hero-by { display: inline-flex; align-items: center; gap: 12px; margin-top: 30px; animation: rise 0.9s 0.52s var(--ease) both; }
 .hero-by .mono { font-size: 0.6rem; text-transform: none; letter-spacing: 0.04em; }
 .hero-by .sai-mark { width: 52px; }
-@media (max-width: 920px) { .hero-by { margin-top: 16px; gap: 10px; } .hero-by .sai-mark { width: 44px; } }
+/* On phones the map sits under the copy, so the signature moves below the map, under its caption. */
+.hero-by-m { display: none; }
+@media (max-width: 920px) {
+  .hero-copy .hero-by { display: none; }
+  .hero-by-m { display: inline-flex; align-self: flex-start; margin-top: 10px; gap: 10px; animation: fade 1.2s 0.6s both; }
+  .hero-by-m .sai-mark { width: 44px; }
+}
 /* Foundations: the SAI mark as a masthead, opposite the kicker; inline on phones. */
 .f-hero .wrap { position: relative; }
 .f-by { position: absolute; top: 0; right: var(--gutter); display: flex; flex-direction: column; align-items: flex-end; gap: 10px; color: var(--on-ink-muted); text-decoration: none; transition: color 0.3s; animation: fade 1.2s 0.3s both; }

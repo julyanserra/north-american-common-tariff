@@ -1,0 +1,105 @@
+<!doctype html>
+<!-- Link-preview images (1200×630). Rendered by tools/build-og.mjs:
+     og.html?page=home → assets/img/og-home.jpg, og.html?page=foundations → assets/img/og-foundations.jpg -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=block" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    position: relative; color: #ece8df; font-family: Inter, sans-serif; -webkit-font-smoothing: antialiased;
+    background:
+      radial-gradient(circle at 76% 50%, rgba(240, 138, 36, 0.17), rgba(240, 138, 36, 0) 42%),
+      radial-gradient(circle at 0% 100%, rgba(240, 138, 36, 0.06), rgba(240, 138, 36, 0) 40%),
+      #141311;
+  }
+  /* A hairline frame, like a printed plate */
+  body::after { content: ""; position: absolute; inset: 22px; border: 1px solid rgba(236, 232, 223, 0.09); border-radius: 4px; pointer-events: none; }
+  #map { position: absolute; left: 628px; top: 52px; width: 510px; height: 438px; }
+  .brand { position: absolute; left: 72px; top: 64px; display: flex; align-items: center; gap: 12px; font: 600 23px "Space Grotesk"; letter-spacing: -0.01em; }
+  .brand svg { width: 38px; fill: #f08a24; }
+  .copy { position: absolute; left: 72px; top: 172px; width: 560px; }
+  .kicker { font: 500 15px "JetBrains Mono"; letter-spacing: 0.14em; text-transform: uppercase; color: #f08a24; margin-bottom: 22px; display: flex; align-items: center; gap: 12px; }
+  .kicker::before { content: ""; width: 28px; height: 2px; background: currentColor; }
+  h1 { font: 700 76px/0.98 "Space Grotesk"; letter-spacing: -0.035em; }
+  h1 .hl { color: #f08a24; display: block; }
+  .es { margin-top: 22px; font: 500 27px/1.2 Inter; color: #9a948a; letter-spacing: -0.01em; }
+  .foundations h1 { font-size: 54px; line-height: 1.02; letter-spacing: -0.03em; }
+  .stats { position: absolute; left: 72px; bottom: 112px; display: flex; gap: 30px; font: 400 15px "JetBrains Mono"; color: #9a948a; }
+  .stats b { font-weight: 500; font-size: 19px; color: #ece8df; margin-right: 8px; }
+  .foot { position: absolute; left: 72px; right: 72px; bottom: 54px; display: flex; align-items: center; justify-content: space-between; padding-top: 20px; border-top: 1px solid rgba(236, 232, 223, 0.12); }
+  .url { font: 500 17px "JetBrains Mono"; letter-spacing: 0.02em; color: #ece8df; }
+  .url span { color: #f08a24; }
+  .by { display: flex; align-items: center; gap: 14px; font: 400 14px "JetBrains Mono"; color: #9a948a; }
+  .by svg { width: 76px; height: auto; color: #d9d4c9; }
+  .sai-arc { fill: #f08a24; }
+</style>
+</head>
+<body>
+  <canvas id="map"></canvas>
+  <div class="brand"><svg id="monarch" viewBox="4 17.5 92 65"></svg><span>One North America</span></div>
+  <div class="copy" id="copy"></div>
+  <div class="stats" id="stats"></div>
+  <div class="foot">
+    <p class="url">onenorthamerica<span>.org</span></p>
+    <p class="by">Presented by <svg id="sai" viewBox="0 0 74 47"></svg></p>
+  </div>
+  <script src="../assets/js/data.js"></script>
+  <script>
+    var page = new URLSearchParams(location.search).get("page") || "home";
+    var COPY = {
+      home: {
+        html: '<h1>Three countries.<span class="hl">One market.</span></h1><p class="es">Tres países. Un mercado.</p>',
+        stats: [["521M", "people"], ["$33T", "economy"], ["30%", "of world output"]]
+      },
+      foundations: {
+        html: '<p class="kicker">Foundations · Fundamentos</p><h1>The economics, law and evidence behind a <span style="color:#f08a24">united North America.</span></h1>',
+        stats: [["10", "claims"], ["37", "figures"], ["45", "sources"]]
+      }
+    }[page];
+    document.body.classList.add(page);
+    document.getElementById("copy").innerHTML = COPY.html;
+    document.getElementById("stats").innerHTML = COPY.stats.map(function (s) { return "<span><b>" + s[0] + "</b>" + s[1] + "</span>"; }).join("");
+
+    // The two marks are copied from the site's own pages so they stay identical.
+    fetch("../index.html").then(function (r) { return r.text(); }).then(function (html) {
+      var d = new DOMParser().parseFromString(html, "text/html");
+      document.getElementById("monarch").innerHTML = d.querySelector(".brand-mark").innerHTML;
+      var sym = d.querySelector("#sai");
+      document.getElementById("sai").innerHTML = sym.innerHTML;
+      document.body.dataset.marks = "1";
+    });
+
+    // The continent as one perimeter, filled with dots in the three countries' colors.
+    var MAP = window.NA_MAP, cv = document.getElementById("map"), R = 2;
+    var W = cv.clientWidth, H = cv.clientHeight;
+    cv.width = W * R; cv.height = H * R;
+    var ctx = cv.getContext("2d");
+    var vb = MAP.viewBox.split(" ").map(Number), s = Math.min(W / vb[2], H / vb[3]);
+    var land = ["CA", "US", "MX"].map(function (k) { return new Path2D(MAP[k]); });
+    var borders = new Path2D(MAP.borders);
+    var probe = document.createElement("canvas"); probe.width = vb[2] / 2; probe.height = vb[3] / 2;
+    var pc = probe.getContext("2d"); pc.scale(0.5, 0.5); land.forEach(function (l) { pc.fill(l); });
+    var px = pc.getImageData(0, 0, probe.width, probe.height).data;
+    var seed = 19941993, rnd = function () { seed = seed * 16807 % 2147483647; return (seed - 1) / 2147483646; };
+    ctx.setTransform(R * s, 0, 0, R * s, 0, 0);
+    ctx.fillStyle = "rgba(236,232,223,0.05)";
+    land.forEach(function (l) { ctx.fill(l); });
+    ctx.lineJoin = "round"; ctx.lineWidth = 2.6 / s; ctx.strokeStyle = "#f08a24";
+    land.forEach(function (l) { ctx.stroke(l); });
+    ctx.globalCompositeOperation = "destination-out"; ctx.lineWidth = 6 / s; ctx.stroke(borders);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.setLineDash([4 / s, 6 / s]); ctx.lineWidth = 1 / s; ctx.strokeStyle = "rgba(236,232,223,0.32)"; ctx.stroke(borders); ctx.setLineDash([]);
+    var colors = ["#9f3960", "#248fcc", "#56a76a"], n = 0;
+    while (n < 1000) {
+      var x = rnd() * vb[2], y = rnd() * vb[3];
+      if (px[((y / 2 | 0) * probe.width + (x / 2 | 0)) * 4 + 3] < 128) continue;
+      ctx.beginPath(); ctx.arc(x, y, 3.8, 0, Math.PI * 2);
+      ctx.fillStyle = colors[n % 3]; ctx.fill(); n++;
+    }
+    document.fonts.ready.then(function () { document.body.dataset.fonts = "1"; });
+  </script>
+</body>
+</html>

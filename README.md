@@ -56,7 +56,7 @@ assets/css/styles.css
 assets/js/data.js     # generated: map geometry + UN population data (see tools/)
 assets/js/i18n.js     # Spanish translations (English lives in the HTML)
 assets/js/main.js     # hero, chips, tariff schedule, charts, scrambled egg canvas, fact sheet, bibliography search, menu, language switch
-assets/img/           # favicon, social share image
+assets/img/           # favicon, link-preview images (og-*.jpg), SAI mark (sai.svg)
 tools/                # scripts that regenerate data.js
 SOURCES.md            # every figure and its source
 ```
@@ -80,4 +80,4 @@ python3 -m http.server 8000
 - **GitHub Pages:** *Settings → Pages → Source: GitHub Actions*. `.github/workflows/pages.yml` deploys every push to `main`.
 - **Vercel / Netlify / any static host:** serve the repo root; no build command.
 
-Once a domain is set, make `og:image` an absolute URL so link previews work everywhere.
+Link previews (WhatsApp, iMessage, Slack, X) use absolute URLs on **onenorthamerica.org**: `og-home.jpg` for the vision page and `og-foundations.jpg` for the foundations page, 1200×630 JPEGs of about 100 KB (WhatsApp drops preview images over roughly 300 KB). They are rendered from `tools/og.html` by `node tools/build-og.mjs`; if the domain changes, update the `og:`/`twitter:`/canonical URLs in both pages. WhatsApp caches previews per link, so a changed image may take a while to show on links already shared.

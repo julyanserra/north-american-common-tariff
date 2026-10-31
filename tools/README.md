@@ -10,3 +10,7 @@
    (the third argument adds `waIndex`, the 2000–2050 working-age index used by the line chart).
 3. Combine both into `assets/js/data.js` as `window.NA_MAP` and `window.NA_DEMOG`
    (the site uses `viewBox, CA, US, MX, borders, context, labels, ports` from the map and the full demography object).
+
+## Link-preview images
+
+`og.html` is a 1200×630 template (`?page=home` or `?page=foundations`) that draws the map from `../assets/js/data.js` and copies the monarch and SAI marks from `../index.html`. `node build-og.mjs` (needs Playwright) renders it to `../assets/img/og-home.jpg` and `../assets/img/og-foundations.jpg`.
