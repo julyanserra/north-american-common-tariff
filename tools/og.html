@@ -27,9 +27,11 @@
   h1 .hl { color: #f08a24; display: block; }
   .es { margin-top: 22px; font: 500 27px/1.2 Inter; color: #9a948a; letter-spacing: -0.01em; }
   .foundations h1 { font-size: 54px; line-height: 1.02; letter-spacing: -0.03em; }
-  .stats { position: absolute; left: 72px; bottom: 112px; display: flex; gap: 30px; font: 400 15px "JetBrains Mono"; color: #9a948a; }
+  .stats { position: absolute; left: 72px; bottom: 142px; display: flex; gap: 30px; font: 400 15px "JetBrains Mono"; color: #9a948a; }
   .stats b { font-weight: 500; font-size: 19px; color: #ece8df; margin-right: 8px; }
-  .foot { position: absolute; left: 72px; right: 72px; bottom: 54px; display: flex; align-items: center; justify-content: space-between; padding-top: 20px; border-top: 1px solid rgba(236, 232, 223, 0.12); }
+  .foot { position: absolute; left: 72px; right: 72px; bottom: 54px; display: flex; align-items: center; justify-content: space-between; padding-top: 20px; }
+  /* The rule fades out toward the map instead of running under it. */
+  .foot::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, rgba(236, 232, 223, 0.16), rgba(236, 232, 223, 0.1) 55%, rgba(236, 232, 223, 0)); }
   .url { font: 500 17px "JetBrains Mono"; letter-spacing: 0.02em; color: #ece8df; }
   .url span { color: #f08a24; }
   .by { display: flex; align-items: center; gap: 14px; font: 400 14px "JetBrains Mono"; color: #9a948a; }
