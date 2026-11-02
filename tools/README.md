@@ -14,3 +14,7 @@
 ## Link-preview images
 
 `og.html` is a 1200×630 template (`?page=home` or `?page=foundations`) that draws the map from `../assets/js/data.js` and copies the monarch and SAI marks from `../index.html`. `node build-og.mjs` (needs Playwright) renders it to `../assets/img/og-home.jpg` and `../assets/img/og-foundations.jpg`.
+
+## Footer stamp
+
+`node build-stamp.mjs` merges Canada, the United States and Mexico from world-atlas (1:110m) into one simplified outline and prints its path (fitted to a 100×100 box) for the `stamp-land` path in both footers. `Q=0.2` gives a lighter path, `Q=0.5` a more detailed one.

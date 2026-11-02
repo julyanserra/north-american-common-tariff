@@ -610,12 +610,23 @@ section { position: relative; }
    Footer
    ========================================================================== */
 .site-foot { background: var(--ink); color: var(--on-ink-muted); padding: 48px 0 56px; border-top: 1px solid var(--line-ink); }
-.foot-grid { display: grid; grid-template-columns: auto 1fr; gap: 16px 40px; align-items: center; }
+.foot-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 40px; align-items: center; }
 .site-foot .brand { color: var(--on-ink); }
-.foot-tri { grid-column: 1 / -1; font-size: 0.62rem; }
+.foot-tri { grid-column: 1; font-size: 0.62rem; }
 .foot-tri span { white-space: nowrap; }
-.foot-note { grid-column: 1 / -1; max-width: 760px; font-size: 0.9rem; }
+.foot-note { grid-column: 1; max-width: 760px; font-size: 0.9rem; }
 @media (max-width: 640px) { .foot-grid { grid-template-columns: 1fr; } }
+
+/* "Made in North America": a rubber-stamp seal in monarch orange, tilted, opposite the note.
+   It lands like a stamp the first time the footer comes into view and straightens on hover. */
+.na-stamp { grid-column: 2; grid-row: 2 / span 2; justify-self: end; width: 136px; color: var(--signal); transform: rotate(-9deg); opacity: 0.88; transition: transform 0.5s var(--ease), opacity 0.3s; }
+.na-stamp svg { display: block; width: 100%; height: auto; overflow: visible; }
+.na-stamp .ring { fill: none; stroke: currentColor; }
+.na-stamp .stamp-text { fill: currentColor; font: 500 10.5px var(--f-mono); letter-spacing: 0.06em; }
+.na-stamp .stamp-star, .na-stamp .stamp-land { fill: currentColor; }
+.na-stamp.reveal { opacity: 0; transform: rotate(-9deg) scale(1.45); transition: transform 0.45s cubic-bezier(0.3, 1.45, 0.5, 1), opacity 0.2s; }
+.na-stamp.reveal.in { opacity: 0.88; transform: rotate(-9deg); }
+.na-stamp.reveal.in:hover { opacity: 1; transform: rotate(-2deg) scale(1.05); transition: transform 0.5s var(--ease), opacity 0.3s; }
 
 /* SAI Derecho & Economía: a quiet signature. The letters take the text color; the arc under
    "SAI" is drawn in the monarch orange, like the perimeter line, and warms on hover. */
@@ -636,7 +647,8 @@ section { position: relative; }
   .foot-sai { order: 3; justify-self: stretch; justify-content: space-between; padding: 16px 0; border-top: 1px solid var(--line-ink); border-bottom: 1px solid var(--line-ink); }
   .foot-sai .sai-mark { width: 74px; }
   .foot-tri { order: 4; line-height: 1.9; }
-  .foot-egg { order: 5; min-height: 0; }
+  .na-stamp, .na-stamp.reveal.in { order: 5; grid-column: 1; grid-row: auto; justify-self: center; width: 118px; margin-top: 10px; }
+  .foot-egg { order: 6; min-height: 0; }
 }
 .hero-by { display: inline-flex; align-items: center; gap: 12px; margin-top: 30px; animation: rise 0.9s 0.52s var(--ease) both; }
 .hero-by .mono { font-size: 0.6rem; text-transform: none; letter-spacing: 0.04em; }
@@ -1066,6 +1078,7 @@ figure:target { animation: arrive-box 1.8s var(--ease) 0.4s; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-delay: 0ms !important; transition-duration: 0.001ms !important; transition-delay: 0ms !important; }
   .reveal { opacity: 1; transform: none; }
+  .na-stamp.reveal { opacity: 0.88; transform: rotate(-9deg); }
   .brand-mark { animation: none !important; }
 }
 
