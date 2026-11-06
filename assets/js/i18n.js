@@ -458,7 +458,7 @@ window.I18N = {
     "se.s1.n": "comercio de bienes de EE. UU. con Canadá y México en 2024: 5.5 veces más.",
     "se.s2.k": "2017 · 2025",
     "se.s2.t": "Intenta desrevolverlo.",
-    "se.s2.p": "Ya se intentó. En 2017 Estados Unidos amenazó con salir del TLCAN; terminó firmando el T-MEC. En 2025 los aranceles golpearon a ambos vecinos; en lugar de irse, las empresas certificaron sus bienes como norteamericanos, y los bienes de México terminaron enfrentando uno de los aranceles más bajos entre los grandes proveedores.",
+    "se.s2.p": "Ya se intentó. En 2017 Estados Unidos amenazó con salir del TLCAN; terminó firmando el T-MEC. En 2025 los aranceles golpearon a ambos vecinos; en lugar de irse, las empresas certificaron sus bienes como norteamericanos.",
     "se.s2.n": "de las importaciones de EE. UU. desde Canadá y México reclamaban el T-MEC en julio de 2025, frente a menos de la mitad antes.",
     "se.s3.k": "Lo que sigue",
     "se.s3.t": "Hacia adelante: un solo perímetro.",
@@ -796,14 +796,14 @@ window.I18N = {
     "px.cas": "79% vía T-MEC",
     "px.tag": "La paradoja de 2025",
     "px.h": "Aranceles para todos. México salió ganando.",
-    "px.p1": "En 2025 Washington subió los aranceles a casi todos sus proveedores, incluidos sus vecinos. Pero los bienes que demostraban ser norteamericanos siguieron cruzando sin arancel, y para julio así entraban tres de cada cuatro de los de México. Las importaciones de China pagaron un arancel efectivo de 40%, y a Brasil y la India les impusieron tasas nominales de 50%. Las de México pagaron menos de 5%, y México siguió siendo el principal origen de las importaciones de EE. UU.: 534.8 mil millones de dólares en 2025.",
-    "px.p2": "El perímetro ya existe, por accidente: lo traza un solo país, solo se abre a los bienes con los papeles en regla y se redibuja cada vez que Washington cambia de rumbo. Un arancel común lo trazaría a propósito: fijado por los tres, sin papeleo adentro, hecho para durar.",
+    "px.p1": "En 2025 Washington subió los aranceles a casi todos sus proveedores. Pero los bienes que demostraban ser norteamericanos siguieron cruzando sin arancel, y la mayoría de los de México lo hicieron.",
+    "px.p2": "Un perímetro accidental, trazado por un solo país y abierto solo con papeleo. Un arancel común lo trazaría a propósito: fijado por los tres, hecho para durar.",
     "evl.px": "La evidencia: lo que revelaron los aranceles de 2025",
     "px.t": "Arancel efectivo de EE. UU. por proveedor, julio de 2025",
     "px.s": "Aranceles cobrados, % del valor de las importaciones",
-    "px.note": "Tasa efectiva: aranceles cobrados entre el valor de las importaciones para consumo. Los bienes que calificaban bajo el T-MEC entraron sin arancel; el acero y el aluminio siguieron pagando aranceles sectoriales. Brasil e India: tasas nominales vigentes desde agosto de 2025. En febrero de 2026 la Suprema Corte anuló los aranceles de emergencia de 2025; el arancel global de 10% que los sustituyó volvió a exentar a los bienes del T-MEC. Fuentes: Banco de la Reserva Federal de Nueva York (2025), con datos del Census; CRS (2026); Cleary Gottlieb (2025).",
+    "px.note": "Brasil e India, no incluidos: tasas anunciadas de 50% desde agosto de 2025. Fuentes: Banco de la Reserva Federal de Nueva York (2025); CRS (2026); Cleary Gottlieb (2025).",
     "q9": "¿No le hicieron daño a México los aranceles de 2025?",
-    "a9": "Menos que a casi nadie. Los bienes que calificaban bajo el T-MEC siguieron sin arancel, así que en julio de 2025 las importaciones desde México pagaron un arancel efectivo de 4.7%, frente a 40.4% las de China, y México siguió siendo el principal origen de las importaciones de EE. UU. Pero esa ventaja depende del papeleo y de decisiones que se toman solo en Washington. Una unión aduanera la volvería permanente y compartida: un solo perímetro, fijado por los tres.",
+    "a9": "Menos que a casi nadie. Los bienes que calificaban bajo el T-MEC siguieron sin arancel, así que en julio de 2025 las importaciones desde México pagaron un arancel efectivo de 4.7%, frente a 40.4% las de China. Pero esa ventaja depende del papeleo y de Washington; una unión aduanera la volvería permanente y compartida.",
     "f.back": "← Volver a la visión"
   }
 };
