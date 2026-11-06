@@ -18,3 +18,7 @@
 ## Footer stamp
 
 `node build-stamp.mjs` merges Canada, the United States and Mexico from world-atlas (1:110m) into one simplified outline and prints its path (fitted to a 100×100 box) for the `stamp-land` path in both footers. `Q=0.2` gives a lighter path, `Q=0.5` a more detailed one.
+
+## Spanish pages, structured data and files for search engines
+
+`node build-seo.mjs` (needs Playwright) reads `../index.html`, `../foundations.html` and `../assets/js/i18n.js` and writes the Spanish pages (`../es/index.html`, `../es/fundamentos.html`), the JSON-LD block (`<script id="ld">`) in all four pages, the prerendered fact sheet rows in both Foundations pages, the fact sheet CSVs (`../assets/data/`), `../sitemap.xml`, `../llms.txt`, `../llms-full.txt` and `../es/llms-full.txt`. It warns about any `data-i18n` key that has no Spanish string. Run it after every change to the pages or to `i18n.js`.

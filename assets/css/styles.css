@@ -636,6 +636,8 @@ section { position: relative; }
 
 /* "Made in North America": a rubber-stamp seal in monarch orange, tilted, opposite the note.
    It lands like a stamp the first time the footer comes into view and straightens on hover. */
+/* The stamp starts scaled up before it lands; the footer clips it instead of widening the page. */
+.site-foot { overflow-x: clip; }
 .na-stamp { grid-column: 2; grid-row: 2 / span 2; justify-self: end; width: 136px; color: var(--signal); transform: rotate(-9deg); opacity: 0.88; transition: transform 0.5s var(--ease), opacity 0.3s; }
 .na-stamp svg { display: block; width: 100%; height: auto; overflow: visible; }
 .na-stamp .ring { fill: none; stroke: currentColor; }
@@ -867,6 +869,11 @@ section { position: relative; }
 .method { padding: 24px; border: 1px solid var(--line-paper); border-radius: var(--radius); background: #fff; }
 .method h3 { font-size: 1.05rem; margin-bottom: 8px; }
 .method p { color: var(--on-paper-muted); font-size: 0.93rem; }
+.glossary dt { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
+.glossary dfn { font-style: normal; }
+.glossary dd { margin: 0; color: var(--on-paper-muted); font-size: 0.93rem; }
+.glossary .method { scroll-margin-top: 90px; }
+#terms .share { margin-top: 36px; }
 .method-repo { grid-column: 1 / -1; background: var(--on-paper); border-color: var(--on-paper); color: var(--paper); }
 .method-repo p { color: rgba(242, 239, 232, 0.72); max-width: 720px; }
 .repo-links { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; text-transform: none; letter-spacing: 0.02em; }

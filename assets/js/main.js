@@ -37,14 +37,13 @@
   function fmt(n, d) { return n.toLocaleString(current === "es" ? "es-MX" : "en-US", { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
 
   // Smooth path through points (Catmull-Rom → cubic Bézier).
-  /* ───────────────────────── i18n ───────────────────────── */
+  /* ───────────────────────── i18n ─────────────────────────
+     Each language has its own URL, so search engines and AI crawlers can read both: English at
+     / and /foundations.html, Spanish at /es/ and /es/fundamentos.html (generated from these pages
+     and i18n.js by tools/build-seo.mjs). The HTML already carries the page's language; t() serves
+     the strings that charts and widgets build in JavaScript. */
   var DICT = window.I18N || {};
-  var current = "en";
-  var originals = new Map();
-  $$("[data-i18n],[data-i18n-html]").forEach(function (n) { originals.set(n, n.innerHTML); });
-  var metaDesc = $('meta[name="description"]');
-  var originalMeta = { title: document.title, desc: metaDesc ? metaDesc.content : "" };
-  var pageKey = doc.getAttribute("data-page") || "home";
+  var current = doc.lang === "es" ? "es" : "en";
   var langListeners = [];
 
   function t(key) {
@@ -52,30 +51,39 @@
     return (d && d[key]) || (DICT.en && DICT.en[key]) || "";
   }
 
-  function setLang(lang) {
-    current = lang === "es" ? "es" : "en";
-    var dict = DICT[current] || {};
-    originals.forEach(function (html, n) {
-      var key = n.getAttribute("data-i18n") || n.getAttribute("data-i18n-html");
-      n.innerHTML = current === "en" || !dict[key] ? html : dict[key];
-    });
-    doc.lang = current;
-    document.title = current === "en" ? originalMeta.title : dict["meta.title." + pageKey] || originalMeta.title;
-    if (metaDesc) metaDesc.content = current === "en" ? originalMeta.desc : dict["meta.desc." + pageKey] || originalMeta.desc;
-    $$(".lang button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.lang === current)); });
-    try { localStorage.setItem("ona-lang", current); } catch (e) { /* storage unavailable */ }
-    var url = new URL(window.location.href);
-    if (current === "es") url.searchParams.set("lang", "es"); else url.searchParams.delete("lang");
-    history.replaceState(null, "", url);
-    // Keep cross-page links in the chosen language.
-    $$('a[href*=".html"]').forEach(function (a) {
-      var u = new URL(a.getAttribute("href"), window.location.href);
-      if (current === "es") u.searchParams.set("lang", "es"); else u.searchParams.delete("lang");
-      a.setAttribute("href", u.pathname.split("/").pop() + u.search + u.hash);
-    });
-    langListeners.forEach(function (fn) { fn(); });
+  // The section in view, so switching language lands in the same place.
+  function sectionInView() {
+    var id = "";
+    $$("main section[id]").forEach(function (sec) { if (sec.getBoundingClientRect().top < window.innerHeight * 0.4) id = sec.id; });
+    return id;
   }
-  $$(".lang button").forEach(function (b) { b.addEventListener("click", function () { setLang(b.dataset.lang); }); });
+  // The language buttons carry the other page's address in data-href.
+  function langHref(lang, hash) {
+    var b = $('.lang button[data-lang="' + lang + '"]');
+    return b && b.dataset.href ? b.dataset.href + (hash ? "#" + hash : "") : "";
+  }
+  $$(".lang button").forEach(function (b) {
+    b.setAttribute("aria-pressed", String(b.dataset.lang === current));
+    b.addEventListener("click", function () {
+      if (b.dataset.lang === current) return;
+      try { localStorage.setItem("ona-lang", b.dataset.lang); } catch (e) { /* storage unavailable */ }
+      var href = langHref(b.dataset.lang, sectionInView());
+      if (href) window.location.href = href;
+    });
+  });
+
+  // Old links carried ?lang=es. On the English pages a saved choice, or a Spanish browser, opens
+  // the Spanish page; a Spanish URL is always honored.
+  (function () {
+    var want = new URLSearchParams(window.location.search).get("lang");
+    if (!want && current === "en") {
+      try { want = localStorage.getItem("ona-lang"); } catch (e) { want = null; }
+      if (!want) want = (navigator.language || "en").toLowerCase().indexOf("es") === 0 ? "es" : "en";
+    }
+    var href = (want === "es" || want === "en") && want !== current ? langHref(want, window.location.hash.slice(1)) : "";
+    if (href) { doc.classList.add("redirecting"); window.location.replace(href); }
+  })();
+  if (doc.classList.contains("redirecting")) return;
 
   /* ───────────────────────── Hero: three tariffs → one market, played on load ───────────────────────── */
   var hero = $(".hero");
@@ -106,7 +114,7 @@
   }
   function labelHeroMap() {
     if (!heroParts) return;
-    heroParts.labels.CA.textContent = "Canada";
+    heroParts.labels.CA.textContent = t("wa.CA");
     heroParts.labels.US.textContent = t("map.us");
     heroParts.labels.MX.textContent = t("map.mx");
     heroParts.na.textContent = t("map.na");
@@ -518,7 +526,7 @@
   function buildUtilization() {
     dumbbells($("#ut-chart"), [
       { name: t("map.mx"), from: 50, to: 80, color: C.MX, fromLabel: "≈50%", toLabel: "≈80%" },
-      { name: "Canada", from: 38, to: 80, color: C.CA, fromLabel: "<40%", toLabel: "≈80%" },
+      { name: t("wa.CA"), from: 38, to: 80, color: C.CA, fromLabel: "<40%", toLabel: "≈80%" },
       { name: t("ut.veh"), from: null, to: 94.7, color: "#a84b0a", toLabel: "94.7%" }
     ], 0, 100, function (v) { return v + "%"; });
   }
@@ -529,7 +537,7 @@
     dumbbells($("#dep-chart"), [
       { name: t("map.mx"), from: dep("2025", "MX"), to: dep("2050", "MX"), color: C.MX },
       { name: t("map.us"), from: dep("2025", "US"), to: dep("2050", "US"), color: C.US },
-      { name: "Canada", from: dep("2025", "CA"), to: dep("2050", "CA"), color: C.CA },
+      { name: t("wa.CA"), from: dep("2025", "CA"), to: dep("2050", "CA"), color: C.CA },
       { name: t("map.na"), from: dep("2025", "NA"), to: dep("2050", "NA"), color: "#a84b0a" },
       { name: "China", from: dep("2025", "CN"), to: dep("2050", "CN"), color: "#6f6a61" }
     ], 0.35, 0.75, function (v) { return fmt(v, 2); });
@@ -560,7 +568,7 @@
     el("line", { x1: xl, x2: xl, y1: top, y2: bot, "class": "grid" }, svg);
     el("line", { x1: xr, x2: xr, y1: top, y2: bot, "class": "grid" }, svg);
     SLOPE.forEach(function (s) {
-      var name = s[0] === "MX" ? t("map.mx") : s[0];
+      var name = s[0] === "MX" ? t("map.mx") : s[0] === "Canada" ? t("wa.CA") : s[0];
       var line = el("line", { x1: xl, y1: Y(s[1]), x2: xl, y2: Y(s[1]), stroke: s[3], "stroke-width": s[0] === "China" ? 3 : 4, "stroke-linecap": "round", "class": "slope-line" }, svg);
       line.dataset.x2 = xr; line.dataset.y2 = Y(s[2]);
       el("circle", { cx: xl, cy: Y(s[1]), r: 6, fill: s[3] }, svg);
@@ -722,7 +730,7 @@
           var tot = 0, parts = [];
           ["MX", "US", "CA"].forEach(function (c) {
             var v = data[c][i][0] + data[c][i][1]; tot += v;
-            parts.push((c === "CA" ? "Canada" : t("map." + c.toLowerCase())) + " " + fmt(v / 1000, 1) + "M");
+            parts.push((c === "CA" ? t("wa.CA") : t("map." + c.toLowerCase())) + " " + fmt(v / 1000, 1) + "M");
           });
           $$(".row-hit", svg).forEach(function (h) { h.classList.remove("on"); });
           hit.classList.add("on");
@@ -1111,8 +1119,6 @@
     }).join("");
     var n = $("#fs-count");
     if (n) n.textContent = t("fs.count").replace("{n}", rows.length).replace("{m}", FACTS.length);
-    // The section links keep the chosen language.
-    if (current === "es") $$("a", body).forEach(function (a) { if (a.getAttribute("href").indexOf("index.html") === 0) a.setAttribute("href", a.getAttribute("href").replace("index.html", "index.html?lang=es")); });
   }
   function buildFactSheet() {
     var chips = $("#fs-chips");
@@ -1313,12 +1319,7 @@
   buildPerimeterMap();
   startRoute();
   buildEgg();
-  var initial = new URLSearchParams(window.location.search).get("lang");
-  if (!initial) {
-    try { initial = localStorage.getItem("ona-lang"); } catch (e) { initial = null; }
-    if (!initial) initial = (navigator.language || "en").toLowerCase().indexOf("es") === 0 ? "es" : "en";
-  }
-  setLang(initial);
+  langListeners.forEach(function (fn) { fn(); });
   playHero();
   onScroll();
 })();

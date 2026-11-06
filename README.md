@@ -53,13 +53,17 @@ The logo is a monarch butterfly, the one traveler that already crosses all three
 **Phones.** The section links and the language switch live in the menu; wide charts switch to a narrow layout with larger type; no text is set below about 11px; touch screens get "tap" instead of "hover" hints. In the scrambled egg section, upright phones get a full-screen canvas that draws in its upper part while each step arrives as a card sliding over it (phones held sideways keep the side-by-side layout; the query lives in both `styles.css` and `EGG_OVERLAY` in `main.js`). On the perimeter map the toggle sits above the map and minor port labels are hidden.
 
 ```
-index.html, foundations.html
+index.html, foundations.html    # the English pages: the source of all copy and structure
+es/                   # generated: the Spanish pages (index.html, fundamentos.html) and es/llms-full.txt
 assets/css/styles.css
 assets/js/data.js     # generated: map geometry + UN population data (see tools/)
 assets/js/i18n.js     # Spanish translations (English lives in the HTML)
 assets/js/main.js     # hero, chips, tariff schedule, charts, scrambled egg canvas, fact sheet, bibliography search, menu, language switch
+assets/data/           # generated: the fact sheet as CSV (English and Spanish)
 assets/img/           # favicon, link-preview images (og-*.jpg), SAI mark (sai.svg)
-tools/                # scripts that regenerate data.js
+tools/                # scripts that regenerate data.js, the link-preview images and the SEO files
+robots.txt, sitemap.xml, llms.txt, llms-full.txt   # for search engines and AI assistants (sitemap and llms files are generated)
+vercel.json           # /es → /es/ redirect, plain-text headers for the llms files
 SOURCES.md            # every figure and its source
 ```
 
@@ -67,19 +71,33 @@ SOURCES.md            # every figure and its source
 
 ```bash
 python3 -m http.server 8000
-# http://localhost:8000          (add ?lang=es for Spanish)
+# http://localhost:8000          English
+# http://localhost:8000/es/      Spanish
 ```
 
 ### Editing
 
 - **English copy:** edit the HTML directly.
 - **Spanish copy:** each translatable element has `data-i18n="key"`; edit that key in `assets/js/i18n.js`.
+- **After any change to `index.html`, `foundations.html` or `i18n.js`, run `node tools/build-seo.mjs`** (needs Playwright). It regenerates the Spanish pages, the structured data, the prerendered fact sheet, the CSVs, the sitemap and the llms files. Never edit the files in `es/` by hand.
 - **Tariff schedule rows:** `SCHEDULE` in `assets/js/main.js` (names and rule text are i18n keys `sch.p.*`, `sch.rule.*`).
 - **Fact sheet rows:** `FACTS` in `assets/js/main.js` (labels are i18n keys `fs.f.*`, in both `en` and `es`). Keep it in step with `SOURCES.md`.
 
 ### Deploy
 
 - **GitHub Pages:** *Settings → Pages → Source: GitHub Actions*. `.github/workflows/pages.yml` deploys every push to `main`.
-- **Vercel / Netlify / any static host:** serve the repo root; no build command.
+- **Vercel / Netlify / any static host:** serve the repo root; no build command (the generated files are committed).
+
+### Search engines and AI assistants
+
+Each language has its own URL, so both are indexed: English at `/` and `/foundations.html`, Spanish at `/es/` and `/es/fundamentos.html`. The language buttons go to the other page and keep the section in view; old `?lang=es` links and visitors whose browser or saved choice is Spanish are sent to the Spanish page (crawlers are never redirected).
+
+- **Titles and descriptions** name the concept people search for ("North American customs union", "unión aduanera de América del Norte"); Spanish ones are `meta.*` keys in `i18n.js`.
+- **`hreflang`** links in every page and in `sitemap.xml` pair each page with its translation.
+- **Structured data** (`<script id="ld">`, schema.org JSON-LD), read from the page itself: the publisher (SAI), the site, the page, the 2025 paper it is based on, an FAQPage (the FAQ on the vision page, the objections on Foundations), and on Foundations an Article with its 48 citations, a DefinedTermSet (the key terms, each with an anchor such as `#term-customs-union`) and a Dataset for the fact sheet.
+- **Answer-first text:** the FAQ opens with what a North American customs union is, how it differs from the USMCA and what the scrambled egg theorem is; Foundations ends with ten key terms marked up as a glossary (`<dfn>`).
+- **Without JavaScript** (most AI crawlers): all copy, both languages, the FAQ and the full fact sheet are in the HTML.
+- **`llms.txt`** summarizes the site for AI assistants and links to `llms-full.txt` / `es/llms-full.txt`, the full text of both pages.
+- **`robots.txt`** allows every crawler, AI search and answer engines included, keeps `tools/` out, and points to the sitemap.
 
 Link previews (WhatsApp, iMessage, Slack, X) use absolute URLs on **onenorthamerica.org**: `og-home.jpg` for the vision page and `og-foundations.jpg` for the foundations page, 1200×630 JPEGs of about 100 KB (WhatsApp drops preview images over roughly 300 KB). They are rendered from `tools/og.html` by `node tools/build-og.mjs`; if the domain changes, update the `og:`/`twitter:`/canonical URLs in both pages. WhatsApp caches previews per link, so a changed image may take a while to show on links already shared.

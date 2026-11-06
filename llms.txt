@@ -1,0 +1,31 @@
+# One North America
+
+> The case for a North American customs union: Canada, the United States and Mexico charging one common external tariff at the continent's edge, with goods moving freely inside and no certificates of origin, and one trade policy toward the rest of the world. Based on Noyola & Serra, "A Case for a North American Common Tariff" (Wilson Center, 2025). Presented by SAI Derecho & Economía. In English and Spanish.
+
+Every figure on the site has a source; illustrative elements are labeled as such. The Foundations page holds the argument, the evidence, the objections and 48 sources.
+
+## Pages
+
+- [One North America](https://onenorthamerica.org/): the vision. The common tariff, one perimeter instead of internal customs, an economy already built together, the 2025 tariff paradox, the scrambled egg theorem, demography, the path to a union, and an FAQ.
+- [Foundations](https://onenorthamerica.org/foundations.html): the argument in six steps, the 2025 proposal, its intellectual lineage, ten evidence themes, the hardest objections and replies, a fact sheet of every figure with its source, methods, a bibliography and key terms.
+- [Una Norteamérica](https://onenorthamerica.org/es/): the vision, in Spanish.
+- [Fundamentos](https://onenorthamerica.org/es/fundamentos.html): Foundations, in Spanish.
+
+## Full text and data
+
+- [llms-full.txt](https://onenorthamerica.org/llms-full.txt): the full English text of both pages, including the FAQ, the evidence, the fact sheet and the bibliography.
+- [es/llms-full.txt](https://onenorthamerica.org/es/llms-full.txt): the same, in Spanish.
+- [Fact sheet (CSV)](https://onenorthamerica.org/assets/data/one-north-america-fact-sheet.csv): every figure with its value, source and link. Spanish: [una-norteamerica-cifras.csv](https://onenorthamerica.org/assets/data/una-norteamerica-cifras.csv).
+
+## Key terms
+
+- [Customs union](https://onenorthamerica.org/foundations.html#term-customs-union): Countries that trade freely with one another and charge one common tariff on imports from everyone else. A good that enters anywhere can then circulate inside without proving where it was made.
+- [Common external tariff](https://onenorthamerica.org/foundations.html#term-common-external-tariff): The single schedule of import duties that every member of a customs union applies to goods from outside, whichever port they enter. The members set it jointly.
+- [Free trade area](https://onenorthamerica.org/foundations.html#term-free-trade-area): Countries that remove tariffs on each other’s goods but each keep their own tariffs toward the rest of the world, so goods must prove their origin to cross duty-free. NAFTA and the USMCA are free trade areas.
+- [Rules of origin](https://onenorthamerica.org/foundations.html#term-rules-of-origin): The conditions a good must meet to count as made in the region, such as the 75% regional content a car needs under the USMCA. A customs union makes them unnecessary inside.
+- [Certificate of origin](https://onenorthamerica.org/foundations.html#term-certificate-of-origin): The document that proves a shipment meets the rules of origin. In a free trade area firms file one for every qualifying good that crosses a border; inside a customs union none is needed.
+- [Trade creation and trade diversion](https://onenorthamerica.org/foundations.html#term-trade-creation): Jacob Viner’s test for a customs union (1950). Creation: cheaper production in a partner replaces costlier production at home. Diversion: a costlier partner replaces a cheaper outside supplier. A union pays when creation wins.
+- [Effective tariff rate](https://onenorthamerica.org/foundations.html#term-effective-tariff): The duties actually collected divided by the value of imports. It is lower than the announced rate when goods qualify for exemptions, as USMCA goods did in 2025.
+- [Scrambled egg theorem](https://onenorthamerica.org/foundations.html#term-scrambled-egg-theorem): Jaime Serra Puche’s argument that once economies have produced together under free trade they can no longer be separated without breaking all of them, like a scrambled egg. The way forward is deeper integration: a customs union.
+- [Accidental perimeter](https://onenorthamerica.org/foundations.html#term-accidental-perimeter): This site’s name for the 2025 paradox. When the United States raised tariffs on almost every supplier but spared goods that qualified under the USMCA, Mexico and Canada ended up with the lowest effective rates, behind an outer edge drawn by one country.
+- [USMCA (T-MEC, CUSMA)](https://onenorthamerica.org/foundations.html#term-usmca): The United States–Mexico–Canada Agreement, in force since July 1, 2020, which replaced NAFTA (1994). It is a free trade area, not a customs union; since 2026 it is reviewed every year.

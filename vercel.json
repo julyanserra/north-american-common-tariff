@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    { "source": "/es", "destination": "/es/", "permanent": true },
+    { "source": "/es/foundations.html", "destination": "/es/fundamentos.html", "permanent": true }
+  ],
+  "headers": [
+    { "source": "/(llms|llms-full).txt", "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }] },
+    { "source": "/es/llms-full.txt", "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }] }
+  ]
+}
