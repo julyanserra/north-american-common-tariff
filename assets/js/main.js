@@ -415,22 +415,42 @@
     });
   }
 
-  /* ───────────────────────── The clearest case: one car, three tariffs ───────────────────────── */
-  // [label, sub-label, rate, color, flag]
-  var EV = [["ev.us", "", 102.5, C.US], ["ev.ca1", "ev.ca1s", 106.1, C.CA], ["ev.ca2", "ev.ca2s", 6.1, C.CA, "ev.cheap"], ["ev.mx", "", 50, C.MX]];
-  function buildEV() {
-    var host = $("#ev-bars");
+  /* ───────────────────────── Horizontal tariff bars: the EV case and the 2025 paradox ───────────────────────── */
+  // Each row: { k: label key, s: sub-label key, v: rate, c: color, cls: row classes, flag: label key }
+  function buildBars(sel, rows, max, digits) {
+    var host = $(sel);
     if (!host) return;
-    host.innerHTML = EV.map(function (r) {
-      return '<div class="evb-row' + (r[4] ? " is-cheap" : "") + '" style="--c:' + r[3] + '">' +
-        '<span class="evb-name">' + t(r[0]) + (r[1] ? "<small>" + t(r[1]) + "</small>" : "") + "</span>" +
-        '<span class="evb-track"><span class="evb-fill" data-w="' + (r[2] / 110 * 100).toFixed(1) + '%"></span>' + (r[4] ? '<em class="evb-flag mono">' + t(r[4]) + "</em>" : "") + "</span>" +
-        '<b class="evb-val">' + fmt(r[2], r[2] % 1 ? 1 : 0) + "%</b></div>";
+    host.innerHTML = rows.map(function (r) {
+      return '<div class="evb-row' + (r.cls ? " " + r.cls : "") + '" style="--c:' + (r.c || "#5d574e") + '">' +
+        '<span class="evb-name">' + t(r.k) + (r.s ? "<small>" + t(r.s) + "</small>" : "") + "</span>" +
+        '<span class="evb-track"><span class="evb-fill" data-w="' + (r.v / max * 100).toFixed(1) + '%"></span>' + (r.flag ? '<em class="evb-flag mono">' + t(r.flag) + "</em>" : "") + "</span>" +
+        '<b class="evb-val">' + fmt(r.v, digits != null ? digits : r.v % 1 ? 1 : 0) + "%</b></div>";
     }).join("");
     if (host.closest(".in")) growFills(host);
   }
   function growFills(root) { $$("[data-w]", root).forEach(function (n) { n.style.width = n.dataset.w; }); }
-  langListeners.push(buildEV);
+
+  // One car, three tariffs (2026).
+  var EV = [
+    { k: "ev.us", v: 102.5, c: C.US },
+    { k: "ev.ca1", s: "ev.ca1s", v: 106.1, c: C.CA, cls: "is-ca" },
+    { k: "ev.ca2", s: "ev.ca2s", v: 6.1, c: C.CA, cls: "is-ca is-cheap", flag: "ev.cheap" },
+    { k: "ev.mx", v: 50, c: C.MX }
+  ];
+  // Effective U.S. tariff by supplier, July 2025 (NY Fed, Liberty Street Economics, Oct. 2025).
+  var PX = [
+    { k: "px.cn", v: 40.4, c: C.GRAY, cls: "is-cn" },
+    { k: "px.jp", v: 14.8 },
+    { k: "px.kr", v: 13.1 },
+    { k: "px.all", v: 9.7, cls: "is-all" },
+    { k: "px.eu", v: 9.1 },
+    { k: "px.asean", v: 8.4 },
+    { k: "px.mx", s: "px.mxs", v: 4.7, c: C.MX, cls: "is-hl" },
+    { k: "px.tw", v: 3.1 },
+    { k: "px.ca", s: "px.cas", v: 3.0, c: C.CA, cls: "is-hl is-ca" }
+  ];
+  function buildTariffBars() { buildBars("#ev-bars", EV, 110); buildBars("#px-bars", PX, 45, 1); }
+  langListeners.push(buildTariffBars);
 
   /* ───────────────────────── Rules of origin: the ratchet ───────────────────────── */
   // Phones get a narrower viewBox with larger type instead of a shrunken desktop chart.
@@ -1055,6 +1075,8 @@
     ["economy", "e8", "$10,166", "Drewry World Container Index", "https://www.drewry.co.uk/supply-chain-advisors/world-container-index-weekly-update"],
     ["economy", "e9", "60%", "U.S. EIA"],
     ["economy", "e10", "6.4 Bcf/d", "U.S. EIA"],
+    ["economy", "e11", "4.7% · 3.0% · 40.4%", ["Federal Reserve Bank of New York (2025)", "Banco de la Reserva Federal de Nueva York (2025)"], "https://libertystreeteconomics.newyorkfed.org/2025/10/a-country-specific-view-of-tariffs/"],
+    ["economy", "e12", "$534.8B", "CRS IF11175 (2026)", "https://www.congress.gov/crs-product/IF11175"],
     ["theorem", "s1", "$293B · $1.6T", "U.S. Census Bureau", "https://www.census.gov/foreign-trade/balance/c2010.html"],
     ["theorem", "s2", "7–8", "CRS IF11387 (2021)", "https://www.congress.gov/crs-product/IF11387"],
     ["theorem", "s3", "≈40¢", "Koopman, Wang & Wei (2014)"],
@@ -1165,7 +1187,7 @@
 
   /* ───────────────────────── Reveal on scroll ───────────────────────── */
   function onReveal(node) {
-    if ($("#ev-bars", node)) growFills($("#ev-bars", node));
+    $$(".evb", node).forEach(growFills);
     $$(".dumbbells", node).forEach(growDumbbells);
     if ($(".steps", node)) growSteps(node);
     if ($("#slope", node)) growSlope();

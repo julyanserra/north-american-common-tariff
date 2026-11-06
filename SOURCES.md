@@ -103,6 +103,18 @@ The theorem (once the three economies have lived under NAFTA's free trade, the e
 | 2017: the U.S. threatened to withdraw from NAFTA; USMCA signed Nov. 30, 2018, in force July 1, 2020 | Congressional Research Service, R48964 (2026), background on prior negotiations |
 | ≈80% of U.S. imports from Canada and Mexico claimed USMCA by July 2025, up from ≈50% (Mexico) and <40% (Canada) | Federal Reserve Bank of Dallas, Aug. 4, 2026 |
 
+## The 2025 paradox
+
+Washington raised tariffs on almost every supplier in 2025, Mexico and Canada included, yet the two neighbors ended up with the lowest effective rates of any large supplier because goods that qualified under the USMCA stayed duty-free. The site reads this as an accidental perimeter: drawn by one country and open only to goods with origin paperwork; a common tariff would draw it on purpose. "Effective rate" is duties collected divided by the value of imports for consumption, not the announced rate.
+
+| Claim | Source |
+|---|---|
+| Effective U.S. tariff, July 2025: China 40.4%, Japan 14.8%, South Korea 13.1%, all suppliers 9.7%, EU 9.1%, ASEAN 8.4%, Mexico 4.7%, Taiwan 3.1%, Canada 3.0% | Higgins & Klitgaard, "A Country-Specific View of Tariffs," Liberty Street Economics, Federal Reserve Bank of New York, Oct. 6, 2025 (Census data via USITC DataWeb) |
+| 76% of imports from Mexico (50% in 2024) and 79% from Canada (38% in 2024) entered under USMCA in July 2025; steel and aluminum were not exempt | Same |
+| Mexico was the largest supplier of U.S. goods imports in 2025, at $534.8 billion, followed by China and Canada | Congressional Research Service, *U.S.-Mexico Trade Relations*, IF11175, updated Apr. 16, 2026 |
+| Feb. 20, 2026: the Supreme Court struck down the tariffs imposed under IEEPA; the 10% Section 122 tariff that replaced them (from Feb. 24, 2026, for up to 150 days) exempted goods that qualify for and claim USMCA origin | Same; Penn Wharton Budget Model (Mar. 16, 2026) |
+| Brazil: 10% reciprocal tariff plus 40% (order of July 30, 2025), 50% in all, with a list of exclusions. India: 25% reciprocal plus 25% (order of Aug. 6, 2025, in force Aug. 27), 50% in all. Shown on the site as headline rates, not effective ones | Cleary Gottlieb, "President Trump Expands Global Reciprocal Tariffs and Imposes Additional Tariffs on Brazil, Canada, and India," Aug. 2025 |
+
 ## Trade policy, 2024–2026
 
 | Claim | Source |

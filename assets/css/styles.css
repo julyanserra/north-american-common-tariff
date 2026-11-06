@@ -329,7 +329,7 @@ section { position: relative; }
 .evb-track { position: relative; height: 30px; background: var(--ink-3); border-radius: 0 5px 5px 0; }
 .evb-fill { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--c); border-radius: 0 5px 5px 0; transition: width 1.3s var(--ease); }
 .evb-val { font-family: var(--f-display); font-weight: 700; font-size: clamp(1.4rem, 2.4vw, 1.9rem); letter-spacing: -0.03em; text-align: right; color: var(--c); line-height: 1; }
-.evb-row:nth-child(2) .evb-val, .evb-row:nth-child(3) .evb-val { filter: brightness(1.35); }
+.evb-row.is-ca .evb-val { filter: brightness(1.35); }
 .evb-flag { position: absolute; left: calc(5.5% + 14px); top: 50%; transform: translateY(-50%); padding: 4px 10px; border-radius: 999px; background: var(--signal); color: var(--ink); font-size: 0.6rem; white-space: nowrap; opacity: 0; transition: opacity 0.5s 1.2s; }
 .in .evb-flag { opacity: 1; }
 .evb-row.is-cheap .evb-track { box-shadow: inset 0 0 0 1px rgba(240, 138, 36, 0.5); }
@@ -338,6 +338,21 @@ section { position: relative; }
 .ev-union p { color: var(--on-ink-muted); }
 .ev-union b { color: var(--signal); font-weight: 600; }
 .ev-doors .chart-note { margin-top: 14px; }
+/* The 2025 paradox: a ranked list, lighter than the EV case, with the neighbors lit up */
+.paradox { margin-top: 20px; }
+.paradox .ev-copy h3.display { font-size: clamp(2rem, 3.6vw, 3rem); }
+.evb.compact { gap: 9px; }
+.evb.compact .evb-row { grid-template-columns: 128px minmax(0, 1fr) 64px; gap: 12px; }
+.evb.compact .evb-name { font-weight: 500; font-size: 0.9rem; color: var(--on-ink-muted); }
+.evb.compact .evb-track { height: 18px; background: rgba(255, 255, 255, 0.04); }
+.evb.compact .evb-val { font-size: 1.05rem; color: var(--on-ink-muted); }
+.evb.compact .is-cn .evb-name, .evb.compact .is-cn .evb-val { color: var(--on-ink); }
+.evb.compact .is-hl .evb-name { color: var(--on-ink); font-weight: 700; }
+.evb.compact .is-hl .evb-name small { font-weight: 400; color: var(--on-ink-muted); }
+.evb.compact .is-hl .evb-track { height: 24px; }
+.evb.compact .is-hl .evb-val { color: var(--c); font-size: clamp(1.3rem, 2vw, 1.6rem); }
+.evb.compact .is-all .evb-name { font-style: italic; }
+.evb.compact .is-all .evb-fill { background: none; border: 1px dashed var(--on-ink-muted); border-left: 0; }
 @media (max-width: 960px) { .ev-case { grid-template-columns: 1fr; } }
 @media (max-width: 520px) {
   .evb-row { grid-template-columns: 92px minmax(0, 1fr) 76px; gap: 10px; }
@@ -345,6 +360,8 @@ section { position: relative; }
   /* The track is too short to hold the label: it drops below the bar. */
   .evb-row.is-cheap { margin-bottom: 20px; }
   .evb-flag { left: 0; top: calc(100% + 6px); transform: none; }
+  .evb.compact .evb-row { grid-template-columns: 104px minmax(0, 1fr) 50px; gap: 10px; }
+  .evb.compact .evb-name { font-size: 0.84rem; }
 }
 
 .rules { margin-top: 28px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
