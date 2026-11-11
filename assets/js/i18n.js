@@ -173,7 +173,7 @@ window.I18N = {
     "hero.l1": "Tres países.",
     "hero.l2a": "Tres aranceles.",
     "hero.l2b": "Un mercado.",
-    "hero.sub": "Datos, evidencia y argumentos para repensar la integración de América del Norte y explorar su siguiente paso: una unión aduanera.",
+    "hero.sub": "Los datos y la evidencia de que el siguiente paso para América del Norte es una unión aduanera.",
     "hero.f1": "millones de personas",
     "hero.f2": "billones de PIB",
     "hero.f3": "de la producción mundial",
