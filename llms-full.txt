@@ -1,6 +1,6 @@
 # One North America: full text
 
-The English text of onenorthamerica.org, generated from the pages on 2026-11-06. Spanish: https://onenorthamerica.org/es/llms-full.txt
+The English text of onenorthamerica.org, generated from the pages on 2026-11-11. Spanish: https://onenorthamerica.org/es/llms-full.txt
 
 Source: https://onenorthamerica.org/
 
@@ -8,7 +8,7 @@ A proposal for the future of the continent
 
 # Three countries. ~~Three tariffs.~~ One market.
 
-A customs union for North America: one tariff at the edge, goods moving freely inside. Everything else stays national.
+Data, evidence and arguments to rethink North American integration and explore its next step: a customs union.
 
 - 521 million people
 

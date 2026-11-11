@@ -173,7 +173,7 @@ window.I18N = {
     "hero.l1": "Tres países.",
     "hero.l2a": "Tres aranceles.",
     "hero.l2b": "Un mercado.",
-    "hero.sub": "Una unión aduanera para América del Norte: un solo arancel en el perímetro y bienes que circulan libremente adentro. Todo lo demás sigue siendo nacional.",
+    "hero.sub": "Datos, evidencia y argumentos para repensar la integración de América del Norte y explorar su siguiente paso: una unión aduanera.",
     "hero.f1": "millones de personas",
     "hero.f2": "billones de PIB",
     "hero.f3": "de la producción mundial",

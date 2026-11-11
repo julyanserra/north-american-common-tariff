@@ -1,6 +1,6 @@
 # Una Norteamérica: texto completo
 
-El texto en español de onenorthamerica.org/es/, generado a partir de las páginas el 2026-11-06. English: https://onenorthamerica.org/llms-full.txt
+El texto en español de onenorthamerica.org/es/, generado a partir de las páginas el 2026-11-11. English: https://onenorthamerica.org/llms-full.txt
 
 Source: https://onenorthamerica.org/es/
 
@@ -8,7 +8,7 @@ Una propuesta para el futuro del continente
 
 # Tres países. ~~Tres aranceles.~~ Un mercado.
 
-Una unión aduanera para América del Norte: un solo arancel en el perímetro y bienes que circulan libremente adentro. Todo lo demás sigue siendo nacional.
+Datos, evidencia y argumentos para repensar la integración de América del Norte y explorar su siguiente paso: una unión aduanera.
 
 - 521 millones de personas
 
